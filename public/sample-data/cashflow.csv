@@ -1,0 +1,6 @@
+name,value,base,color,is_total
+Opening Cash,8.4,0,#3b82f6,false
+Operating CF,3.2,8.4,#10b981,false
+Investing CF,-1.1,11.6,#f87171,false
+Financing CF,-0.6,10.5,#fbbf24,false
+Closing Cash,9.9,0,#8b5cf6,true

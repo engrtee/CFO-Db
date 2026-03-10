@@ -1,0 +1,5 @@
+bucket,amount
+0-30 days,1.6
+31-60 days,0.9
+61-90 days,0.3
+>90 days,0.1

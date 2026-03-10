@@ -1,0 +1,9 @@
+metric,value,change,is_positive,subtitle,mtd,ytd,yoy
+Total Revenue,$6.9M,+12.4% vs last month,true,MTD: $6.9M,$6.9M,$69.2M,+18.3%
+Gross Profit,$2.1M,+9.2% vs last month,true,Margin: 30.4%,$2.1M,$20.1M,+14.7%
+Operating Expenses,$0.84M,+3.1% vs last month,false,Budget: $0.80M,$0.84M,$8.2M,+5.6%
+EBITDA,$2.0M,+11.1% vs last month,true,Margin: 29.0%,$2.0M,$19.4M,+21.2%
+Net Profit,$1.22M,+8.5% vs last month,true,NPM: 17.7%,$1.22M,$11.8M,+19.4%
+Export Volume,4820 MT,+6.8% vs last month,true,YTD: 42180 MT,4820 MT,42180 MT,+11.3%
+Avg Selling Price,$1431/MT,+4.2% vs last month,true,Global: $1510/MT,$1431/MT,$1382/MT,+22.8%
+Exchange Rate,$1 = ₦1580,-1.2% vs last month,false,"EUR: 1.08 | GBP: 1.26",₦1580,Avg ₦1542,+8.4% dep.
