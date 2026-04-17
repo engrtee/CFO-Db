@@ -6,9 +6,9 @@
   "scripts": {
     "dev": "vite",
     "server": "node src/server/index.js",
-    "build": "npx vite build",
+    "build": "vite build",
     "lint": "eslint .",
-    "preview": "npx vite preview",
+    "preview": "vite preview",
     "typecheck": "tsc --noEmit -p tsconfig.app.json"
   },
   "dependencies": {
