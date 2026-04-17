@@ -4,32 +4,28 @@
 
 @layer base {
   body {
-    @apply antialiased text-gray-900 bg-gray-50;
+    @apply antialiased bg-gt-bg text-gt-text;
+    font-family: Inter, system-ui, sans-serif;
     font-feature-settings: "cv02", "cv03", "cv04", "cv11";
   }
-
-  * {
-    @apply box-border;
-  }
+  * { @apply box-border; }
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: #1E1E1E; }
+  ::-webkit-scrollbar-thumb { background: #444; border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover { background: #F58220; }
 }
 
 @layer utilities {
   .scrollbar-thin {
     scrollbar-width: thin;
-    scrollbar-color: #d1d5db transparent;
+    scrollbar-color: #444 #1E1E1E;
   }
+  .scrollbar-thin::-webkit-scrollbar { width: 6px; height: 6px; }
+  .scrollbar-thin::-webkit-scrollbar-track { background: #1E1E1E; }
+  .scrollbar-thin::-webkit-scrollbar-thumb { background: #444; border-radius: 3px; }
 
-  .scrollbar-thin::-webkit-scrollbar {
-    width: 6px;
-    height: 6px;
-  }
-
-  .scrollbar-thin::-webkit-scrollbar-track {
-    background: transparent;
-  }
-
-  .scrollbar-thin::-webkit-scrollbar-thumb {
-    background-color: #d1d5db;
-    border-radius: 3px;
+  @media print {
+    body { background: #fff !important; color: #000 !important; }
+    .no-print { display: none !important; }
   }
 }

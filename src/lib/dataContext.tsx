@@ -21,6 +21,8 @@ export type DatasetKey =
   | 'forecasts_price'
   | 'forecasts_fx';
 
+export type PeriodMode = 'monthly' | 'quarterly' | 'yearly';
+
 export interface UploadedFile {
   key: DatasetKey;
   filename: string;
@@ -90,6 +92,91 @@ export const useData = (): DataContextValue => {
   if (!ctx) throw new Error('useData must be used within DataProvider');
   return ctx;
 };
+
+// ─── Period filter utilities ─────────────────────────────────────────────────
+
+const MONTH_NAMES = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
+/** Parse month name or number to 1-12 */
+function parseMonthNum(r: CSVRow): number {
+  if (r.month_num) return num(r.month_num);
+  if (r.month) {
+    const idx = MONTH_NAMES.findIndex(m => m.toLowerCase() === String(r.month).toLowerCase().slice(0,3));
+    return idx >= 0 ? idx + 1 : 0;
+  }
+  return 0;
+}
+
+/**
+ * Filter rows by period, year, month/quarter.
+ * Rows without year/quarter/month_num columns pass through in 'yearly' mode.
+ */
+export function filterByPeriod(
+  rows: CSVRow[],
+  mode: PeriodMode,
+  year: number,
+  month: number,
+  quarter: number
+): CSVRow[] {
+  if (mode === 'yearly') {
+    // Show all rows for the selected year; if no year column, show all
+    return rows.filter(r => !r.year || num(r.year) === year);
+  }
+  if (mode === 'quarterly') {
+    return rows.filter(r => {
+      if (r.year && num(r.year) !== year) return false;
+      if (r.quarter) return num(r.quarter) === quarter;
+      // Fall back to month_num quartile derivation
+      const m = parseMonthNum(r);
+      return m > 0 ? Math.ceil(m / 3) === quarter : true;
+    });
+  }
+  // monthly
+  return rows.filter(r => {
+    if (r.year && num(r.year) !== year) return false;
+    const m = parseMonthNum(r);
+    return m > 0 ? m === month : true;
+  });
+}
+
+/**
+ * For trend charts: returns the N months ending at [year, month] from combined data.
+ * Useful for "last 6 months" slice of a monthly dataset.
+ */
+export function lastNMonths(rows: CSVRow[], year: number, month: number, n: number): CSVRow[] {
+  // Build a sorted timeline index
+  const indexed = rows
+    .map(r => ({
+      r,
+      y: r.year ? num(r.year) : year,
+      m: parseMonthNum(r),
+    }))
+    .filter(x => x.m > 0)
+    .sort((a, b) => a.y !== b.y ? a.y - b.y : a.m - b.m);
+
+  // Find the end index (latest month <= selected year/month)
+  let end = indexed.length - 1;
+  for (let i = indexed.length - 1; i >= 0; i--) {
+    if (indexed[i].y < year || (indexed[i].y === year && indexed[i].m <= month)) {
+      end = i;
+      break;
+    }
+  }
+  const start = Math.max(0, end - n + 1);
+  return indexed.slice(start, end + 1).map(x => x.r);
+}
+
+/**
+ * For trend charts in quarterly mode: returns 3 months of the quarter.
+ */
+export function quarterMonths(rows: CSVRow[], year: number, quarter: number): CSVRow[] {
+  return rows.filter(r => {
+    if (r.year && num(r.year) !== year) return false;
+    if (r.quarter) return num(r.quarter) === quarter;
+    const m = parseMonthNum(r);
+    return m > 0 ? Math.ceil(m / 3) === quarter : true;
+  }).sort((a, b) => parseMonthNum(a) - parseMonthNum(b));
+}
 
 // ─── Typed mappers — convert raw CSV rows to typed arrays ─────────────────────
 

@@ -1,340 +1,249 @@
-import React, { useRef, useState } from "react";
+import React, { useState } from 'react';
 import {
-  Download
-  
-} from "lucide-react";
-import jsPDF from "jspdf";
-import html2canvas from "html2canvas";
-import {
-  ResponsiveContainer,
-  LineChart as ReLineChart,
-  Line,
-  XAxis,
-  YAxis,
-  Tooltip,
-  RadarChart as ReRadarChart,
-  Radar as ReRadar,
-  PolarGrid,
-  PolarAngleAxis,
-  PolarRadiusAxis,
-  ScatterChart,
-  Scatter,
-  ZAxis,
-  CartesianGrid,
-  Legend,
-} from "recharts";
+  BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid,
+  Tooltip, ResponsiveContainer, Legend, RadarChart, Radar,
+  PolarGrid, PolarAngleAxis, PolarRadiusAxis,
+} from 'recharts';
+import { Download, TrendingUp } from 'lucide-react';
+import { useDb } from '../lib/DbContext';
+import { SectionCard } from '../components/SectionCard';
+import { DataTable } from '../components/DataTable';
 
-// ---------------- Mock Data ----------------
-const fugazBanks = [
-  {
-    name: "First Bank",
-    netIncome: 420,
-    roe: 15.2,
-    roa: 1.6,
-    costToIncome: 52,
-    npl: 4.2,
-    liquidity: 120,
-    casa: 65,
-    capitalAdequacy: 17,
-    assets: 32.5,
-  },
-  {
-    name: "UBA",
-    netIncome: 470,
-    roe: 17.8,
-    roa: 1.9,
-    costToIncome: 49,
-    npl: 3.8,
-    liquidity: 128,
-    casa: 68,
-    capitalAdequacy: 18,
-    assets: 35.4,
-  },
-  {
-    name: "GTCO",
-    netIncome: 490,
-    roe: 20.1,
-    roa: 2.1,
-    costToIncome: 45,
-    npl: 3.5,
-    liquidity: 132,
-    casa: 70,
-    capitalAdequacy: 19,
-    assets: 37.2,
-  },
-  {
-    name: "Access Bank",
-    netIncome: 455,
-    roe: 16.5,
-    roa: 1.8,
-    costToIncome: 50,
-    npl: 4.0,
-    liquidity: 118,
-    casa: 63,
-    capitalAdequacy: 16,
-    assets: 30.6,
-  },
-  {
-    name: "GTBank",
-    netIncome: 510,
-    roe: 21.4,
-    roa: 2.3,
-    costToIncome: 44,
-    npl: 3.1,
-    liquidity: 135,
-    casa: 72,
-    capitalAdequacy: 20,
-    assets: 38.8,
-  },
+const PEERS = [
+  { name: 'GTBank',      roe: 35.2, roa: 5.1, cir: 34.2, nim: 8.4, npl: 3.1, lcr: 241, cap: 22.1, pat: 609 },
+  { name: 'Zenith Bank', roe: 31.5, roa: 4.2, cir: 37.8, nim: 7.6, npl: 4.5, lcr: 210, cap: 21.3, pat: 796 },
+  { name: 'Access Bank', roe: 28.7, roa: 3.1, cir: 42.0, nim: 6.9, npl: 4.0, lcr: 195, cap: 19.8, pat: 729 },
+  { name: 'UBA',         roe: 30.1, roa: 3.8, cir: 39.5, nim: 7.1, npl: 3.8, lcr: 205, cap: 20.5, pat: 607 },
+  { name: 'First Bank',  roe: 24.3, roa: 2.9, cir: 48.1, nim: 6.2, npl: 5.2, lcr: 182, cap: 17.9, pat: 492 },
+  { name: 'Stanbic',     roe: 22.8, roa: 3.2, cir: 44.5, nim: 6.8, npl: 3.6, lcr: 215, cap: 20.2, pat: 220 },
 ];
 
-const quarterlyTrends = [
-  { quarter: "Q1 2023", Zenith: 450, GTCO: 420, Access: 380, UBA: 400, First: 360 },
-  { quarter: "Q2 2023", Zenith: 460, GTCO: 430, Access: 390, UBA: 410, First: 370 },
-  { quarter: "Q3 2023", Zenith: 480, GTCO: 440, Access: 400, UBA: 420, First: 380 },
-  { quarter: "Q4 2023", Zenith: 500, GTCO: 460, Access: 415, UBA: 435, First: 395 },
-  { quarter: "Q1 2024", Zenith: 510, GTCO: 470, Access: 420, UBA: 440, First: 400 },
-  { quarter: "Q2 2024", Zenith: 525, GTCO: 480, Access: 430, UBA: 450, First: 410 },
-  { quarter: "Q3 2024", Zenith: 540, GTCO: 490, Access: 440, UBA: 460, First: 420 },
-  { quarter: "Q4 2024", Zenith: 560, GTCO: 500, Access: 450, UBA: 470, First: 430 },
+const QUARTERLY = [
+  { q: 'Q1 2023', GTBank: 118, Zenith: 152, Access: 138, UBA: 116, First: 98  },
+  { q: 'Q2 2023', GTBank: 130, Zenith: 165, Access: 150, UBA: 128, First: 107 },
+  { q: 'Q3 2023', GTBank: 148, Zenith: 183, Access: 168, UBA: 142, First: 118 },
+  { q: 'Q4 2023', GTBank: 163, Zenith: 201, Access: 182, UBA: 155, First: 130 },
+  { q: 'Q1 2024', GTBank: 138, Zenith: 192, Access: 171, UBA: 145, First: 115 },
+  { q: 'Q2 2024', GTBank: 155, Zenith: 208, Access: 188, UBA: 160, First: 123 },
+  { q: 'Q3 2024', GTBank: 171, Zenith: 219, Access: 200, UBA: 172, First: 132 },
+  { q: 'Q4 2024', GTBank: 188, Zenith: 233, Access: 215, UBA: 185, First: 143 },
 ];
 
-// ---------------- Component ----------------
-const CompetitorAnalysis: React.FC = () => {
-  const [selectedBank, setSelectedBank] = useState("GTBank");
-  const [selectedQuarter, setSelectedQuarter] = useState("Q3 2024");
-  const [role, setRole] = useState<"CFO" | "Analyst" | "Watcher">("CFO");
-  const pdfRef = useRef<HTMLDivElement>(null);
-
-  const peerMedian = (metric: keyof typeof fugazBanks[0]) => {
-    const values = fugazBanks.map((b) => b[metric]);
-    const sorted = [...values].sort((a, b) => Number(a) - Number(b));
-    const mid = Math.floor(sorted.length / 2);
-    return sorted[mid];
-  };
-
-  const selected = fugazBanks.find((b) => b.name === selectedBank)!;
-
-  const kpis = [
-    { label: "Net Income (₦M)", value: selected.netIncome, peer: peerMedian("netIncome") },
-    { label: "ROE (%)", value: selected.roe, peer: peerMedian("roe") },
-    { label: "ROA (%)", value: selected.roa, peer: peerMedian("roa") },
-    { label: "Cost-to-Income (%)", value: selected.costToIncome, peer: peerMedian("costToIncome") },
-    { label: "NPL Ratio (%)", value: selected.npl, peer: peerMedian("npl") },
-    { label: "Liquidity Ratio (%)", value: selected.liquidity, peer: peerMedian("liquidity") },
-  ];
-
-  const getDeltaColor = (val: number, peer: number, invert = false) => {
-    const better = invert ? val < peer : val > peer;
-    return better ? "text-green-600" : "text-red-600";
-  };
-
-  const radarData = fugazBanks.map((b) => ({
-    bank: b.name,
-    ROE: b.roe,
-    ROA: b.roa,
-    NPL: 10 - b.npl,
-    "Cost-to-Income": 100 - b.costToIncome,
-    CASA: b.casa,
-  }));
-
-  const scatterData = fugazBanks.map((b) => ({
-    bank: b.name,
-    npl: b.npl,
-    capitalAdequacy: b.capitalAdequacy,
-    assets: b.assets * 10,
-  }));
-
-  // ---------------- Export Functions ----------------
-  const exportToPDF = async () => {
-    if (!pdfRef.current) return;
-    const canvas = await html2canvas(pdfRef.current, { scale: 2 });
-    const imgData = canvas.toDataURL("image/png");
-    const pdf = new jsPDF("p", "mm", "a4");
-    const pdfWidth = pdf.internal.pageSize.getWidth();
-    const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
-    pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
-    pdf.save(`Competitor_Analysis_₦{selectedBank}.pdf`);
-  };
-
-  const exportToCSV = () => {
-    const csvContent = [
-      ["Bank", "Net Income", "ROE", "ROA", "Cost-to-Income", "NPL", "Liquidity"],
-      ...fugazBanks.map(b =>
-        [b.name, b.netIncome, b.roe, b.roa, b.costToIncome, b.npl, b.liquidity].join(",")
-      ),
-    ].join("\n");
-
-    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
-    const link = document.createElement("a");
-    link.href = URL.createObjectURL(blob);
-    link.setAttribute("download", `Competitor_Analysis_₦{selectedBank}.csv`);
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  };
-
-  // ---------------- JSX ----------------
+const DK = ({ active, payload, label }: any) => {
+  if (!active || !payload?.length) return null;
   return (
-    <div ref={pdfRef} className="space-y-6 p-4">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-gray-900">Competitor Analysis</h1>
-        <div className="flex gap-3">
-          <select
-            value={role}
-            onChange={(e) => setRole(e.target.value as any)}
-            className="border border-gray-300 rounded-lg px-3 py-1 text-sm"
-          >
-            <option value="CFO">CFO</option>
-            <option value="Analyst">Analyst</option>
-            <option value="Watcher">Watcher</option>
-          </select>
-          <button
-            onClick={exportToCSV}
-            className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-          >
-            <Download className="w-4 h-4" />
-            Export CSV
-          </button>
-          <button
-            onClick={exportToPDF}
-            className="flex items-center gap-2 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
-          >
-            <Download className="w-4 h-4" />
-            Export PDF
-          </button>
+    <div className="bg-gt-card2 border border-gt-border rounded-xl shadow p-3 text-xs">
+      <p className="font-semibold text-white mb-1">{label}</p>
+      {payload.map((p: any) => (
+        <p key={p.name} style={{ color: p.color }}>
+          {p.name}: <span className="font-mono">{typeof p.value === 'number' ? p.value.toFixed(1) : p.value}</span>
+        </p>
+      ))}
+    </div>
+  );
+};
+
+const COLORS: Record<string, string> = {
+  GTBank: '#F58220', Zenith: '#3B82F6', Access: '#10B981', UBA: '#EAB308', First: '#8B5CF6',
+};
+
+const METRICS = [
+  { key: 'roe',  label: 'ROE (%)',         invert: false },
+  { key: 'roa',  label: 'ROA (%)',         invert: false },
+  { key: 'cir',  label: 'CIR (%)',         invert: true  },
+  { key: 'nim',  label: 'NIM (%)',         invert: false },
+  { key: 'npl',  label: 'NPL Ratio (%)',   invert: true  },
+  { key: 'lcr',  label: 'LCR (%)',         invert: false },
+];
+
+const CompetitorAnalysis: React.FC = () => {
+  const { loading, lastSynced, refresh } = useDb();
+  const [selectedMetric, setSelectedMetric] = useState<string>('roe');
+
+  const exportCSV = () => {
+    const headers = ['Bank', 'ROE%', 'ROA%', 'CIR%', 'NIM%', 'NPL%', 'LCR%', 'CAR%', 'PAT(₦bn)'];
+    const rows = PEERS.map(b =>
+      [b.name, b.roe, b.roa, b.cir, b.nim, b.npl, b.lcr, b.cap, b.pat].join(',')
+    );
+    const csv = [headers.join(','), ...rows].join('\n');
+    const blob = new Blob([csv], { type: 'text/csv' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a'); a.href = url; a.download = 'peer_benchmarks.csv'; a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  const radarData = ['ROE', 'ROA', 'NIM', 'LCR (÷10)', 'CAR'].map((subject) => {
+    const entry: Record<string, string | number> = { subject };
+    PEERS.forEach(b => {
+      if (subject === 'ROE') entry[b.name] = b.roe;
+      else if (subject === 'ROA') entry[b.name] = b.roa * 5;
+      else if (subject === 'NIM') entry[b.name] = b.nim;
+      else if (subject === 'LCR (÷10)') entry[b.name] = b.lcr / 10;
+      else entry[b.name] = b.cap;
+    });
+    return entry;
+  });
+
+  const barData = PEERS.map(b => ({ name: b.name, value: (b as any)[selectedMetric] }));
+
+  const gtbank = PEERS[0];
+  const peerAvg = (key: keyof typeof PEERS[0]) =>
+    PEERS.slice(1).reduce((s, b) => s + (b[key] as number), 0) / (PEERS.length - 1);
+
+  const tableRows = PEERS.map(b => ({
+    bank: b.name, 'roe_%': b.roe, 'roa_%': b.roa, 'cir_%': b.cir,
+    'nim_%': b.nim, 'npl_%': b.npl, 'lcr_%': b.lcr, 'car_%': b.cap, 'pat_bn': b.pat,
+  })) as unknown as Record<string, unknown>[];
+
+  return (
+    <SectionCard
+      title="Competitor Analysis"
+      subtitle="GTBank vs Nigerian Tier-1 Peers · FY 2024"
+      icon={<TrendingUp className="w-5 h-5" />}
+      lastSynced={lastSynced}
+      loading={loading}
+      onRefresh={refresh}
+      tableContent={<DataTable rows={tableRows} />}
+    >
+      <div className="space-y-6">
+        {/* Summary vs peer avg */}
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+          {METRICS.map((m) => {
+            const val = (gtbank as any)[m.key] as number;
+            const avg = peerAvg(m.key as keyof typeof PEERS[0]) as number;
+            const good = m.invert ? val < avg : val > avg;
+            const diff = val - avg;
+            return (
+              <div key={m.key} className="bg-gt-card2 border border-gt-border rounded-xl p-3">
+                <p className="text-xs text-gt-muted uppercase tracking-wide mb-1">{m.label}</p>
+                <p className="text-xl font-bold text-white">{val.toFixed(1)}</p>
+                <p className={`text-xs font-semibold mt-0.5 ${good ? 'text-gt-green' : 'text-gt-red'}`}>
+                  {diff >= 0 ? '+' : ''}{diff.toFixed(1)} vs peers
+                </p>
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Metric selector + bar chart */}
+        <div>
+          <div className="flex items-center justify-between mb-3">
+            <p className="text-xs font-semibold text-gt-muted uppercase tracking-widest">
+              Peer Comparison — Select Metric
+            </p>
+            <div className="flex items-center gap-2">
+              <select
+                value={selectedMetric}
+                onChange={e => setSelectedMetric(e.target.value)}
+                className="bg-gt-card2 border border-gt-border text-white text-xs rounded-lg px-2 py-1.5"
+              >
+                {METRICS.map(m => <option key={m.key} value={m.key}>{m.label}</option>)}
+              </select>
+              <button
+                onClick={exportCSV}
+                className="flex items-center gap-1.5 px-2.5 py-1.5 border border-gt-border text-gt-muted hover:text-gt-orange hover:border-gt-orange text-xs rounded-lg transition-colors"
+              >
+                <Download className="w-3.5 h-3.5" />
+                CSV
+              </button>
+            </div>
+          </div>
+          <ResponsiveContainer width="100%" height={220}>
+            <BarChart data={barData} margin={{ top: 4, right: 8, left: 0, bottom: 0 }}>
+              <CartesianGrid strokeDasharray="3 3" stroke="#333" />
+              <XAxis dataKey="name" tick={{ fontSize: 10, fill: '#AAA' }} axisLine={false} tickLine={false} />
+              <YAxis tick={{ fontSize: 10, fill: '#AAA' }} axisLine={false} tickLine={false} width={36} />
+              <Tooltip content={<DK />} />
+              <Bar dataKey="value" name={METRICS.find(m => m.key === selectedMetric)?.label ?? ''}
+                fill="#F58220" radius={[4, 4, 0, 0]}
+                isAnimationActive={false} />
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
+
+        {/* Charts grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          {/* Quarterly PAT trend */}
+          <div>
+            <p className="text-xs font-semibold text-gt-muted uppercase tracking-widest mb-3">
+              Quarterly PAT Trend — ₦bn (8 quarters)
+            </p>
+            <ResponsiveContainer width="100%" height={230}>
+              <LineChart data={QUARTERLY} margin={{ top: 4, right: 8, left: 0, bottom: 0 }}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#333" />
+                <XAxis dataKey="q" tick={{ fontSize: 9, fill: '#AAA' }} axisLine={false} tickLine={false} />
+                <YAxis tick={{ fontSize: 10, fill: '#AAA' }} axisLine={false} tickLine={false}
+                  tickFormatter={v => `₦${v}`} width={44} />
+                <Tooltip content={<DK />} />
+                <Legend iconType="circle" iconSize={8} wrapperStyle={{ fontSize: 10 }} />
+                {['GTBank', 'Zenith', 'Access', 'UBA', 'First'].map(b => (
+                  <Line key={b} type="monotone" dataKey={b} stroke={COLORS[b] ?? '#888'}
+                    strokeWidth={b === 'GTBank' ? 2.5 : 1.5}
+                    dot={false}
+                    strokeDasharray={b === 'GTBank' ? undefined : '4 2'} />
+                ))}
+              </LineChart>
+            </ResponsiveContainer>
+          </div>
+
+          {/* Radar */}
+          <div>
+            <p className="text-xs font-semibold text-gt-muted uppercase tracking-widest mb-3">
+              Multi-Metric Radar (normalised)
+            </p>
+            <ResponsiveContainer width="100%" height={230}>
+              <RadarChart cx="50%" cy="50%" outerRadius="70%" data={radarData}>
+                <PolarGrid stroke="#333" />
+                <PolarAngleAxis dataKey="subject" tick={{ fontSize: 10, fill: '#AAA' }} />
+                <PolarRadiusAxis angle={30} domain={[0, 40]} tick={{ fontSize: 8, fill: '#555' }} />
+                {PEERS.slice(0, 4).map(b => (
+                  <Radar key={b.name} name={b.name} dataKey={b.name}
+                    stroke={COLORS[b.name] ?? '#888'}
+                    fill={COLORS[b.name] ?? '#888'}
+                    fillOpacity={b.name === 'GTBank' ? 0.25 : 0.05} />
+                ))}
+                <Legend iconType="circle" iconSize={8} wrapperStyle={{ fontSize: 10 }} />
+                <Tooltip content={<DK />} />
+              </RadarChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
+
+        {/* Leaderboard */}
+        <div>
+          <p className="text-xs font-semibold text-gt-muted uppercase tracking-widest mb-3">
+            Leaderboard — Ranked by PAT (₦bn)
+          </p>
+          <div className="overflow-x-auto rounded-xl border border-gt-border">
+            <table className="w-full text-xs">
+              <thead>
+                <tr className="bg-gt-card2 border-b border-gt-border">
+                  {['Rank', 'Bank', 'PAT ₦bn', 'ROE %', 'ROA %', 'CIR %', 'NIM %', 'NPL %', 'LCR %', 'CAR %'].map(h => (
+                    <th key={h} className="px-3 py-3 text-left font-semibold text-gt-muted uppercase tracking-wide whitespace-nowrap">{h}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gt-border">
+                {[...PEERS].sort((a, b) => b.pat - a.pat).map((b, i) => (
+                  <tr key={b.name} className={`transition-colors ${b.name === 'GTBank' ? 'bg-gt-orange/5' : 'hover:bg-gt-card2'}`}>
+                    <td className="px-3 py-2.5 text-gt-muted font-mono">{i + 1}</td>
+                    <td className="px-3 py-2.5 font-semibold text-white">{b.name}{b.name === 'GTBank' && <span className="ml-1.5 text-gt-orange text-xs">(us)</span>}</td>
+                    <td className="px-3 py-2.5 font-mono text-white">{b.pat}</td>
+                    <td className="px-3 py-2.5 font-mono text-white">{b.roe}</td>
+                    <td className="px-3 py-2.5 font-mono text-white">{b.roa}</td>
+                    <td className="px-3 py-2.5 font-mono text-white">{b.cir}</td>
+                    <td className="px-3 py-2.5 font-mono text-white">{b.nim}</td>
+                    <td className="px-3 py-2.5 font-mono text-white">{b.npl}</td>
+                    <td className="px-3 py-2.5 font-mono text-white">{b.lcr}</td>
+                    <td className="px-3 py-2.5 font-mono text-white">{b.cap}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
-
-      {/* Filters */}
-      <div className="flex flex-wrap gap-4">
-        <select
-          value={selectedBank}
-          onChange={(e) => setSelectedBank(e.target.value)}
-          className="border border-gray-300 rounded-lg px-3 py-2 text-sm"
-        >
-          {fugazBanks.map((b) => (
-            <option key={b.name}>{b.name}</option>
-          ))}
-        </select>
-
-        <select
-          value={selectedQuarter}
-          onChange={(e) => setSelectedQuarter(e.target.value)}
-          className="border border-gray-300 rounded-lg px-3 py-2 text-sm"
-        >
-          {quarterlyTrends.map((q) => (
-            <option key={q.quarter}>{q.quarter}</option>
-          ))}
-        </select>
-      </div>
-
-      {/* KPI Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-4">
-        {kpis.map((kpi, i) => {
-          const invert = ["Cost-to-Income (%)", "NPL Ratio (%)"].includes(kpi.label);
-          const deltaColor = getDeltaColor(kpi.value, kpi.peer, invert);
-          const delta = (kpi.value - kpi.peer).toFixed(1);
-          return (
-            <div
-              key={i}
-              className="bg-white rounded-xl p-4 border border-gray-200 shadow-sm"
-            >
-              <div className="text-xs text-gray-500">{kpi.label}</div>
-              <div className="text-xl font-bold text-gray-900">{kpi.value}</div>
-              <div className={`text-sm ₦{deltaColor}`}>
-                {delta > 0 ? "+" : ""}
-                {delta}% vs Peer
-              </div>
-            </div>
-          );
-        })}
-      </div>
-
-      {/* Leaderboard */}
-      <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-200">
-        <h2 className="text-lg font-semibold text-gray-900 mb-4">Leaderboard</h2>
-        <table className="w-full text-sm">
-          <thead className="text-gray-500 border-b">
-            <tr>
-              <th className="text-left py-2">Rank</th>
-              <th className="text-left">Bank</th>
-              <th>Net Income (₦M)</th>
-              <th>ROE (%)</th>
-              <th>ROA (%)</th>
-              <th>Cost-to-Income (%)</th>
-              <th>NPL (%)</th>
-              <th>Liquidity (%)</th>
-            </tr>
-          </thead>
-          <tbody>
-            {fugazBanks
-              .sort((a, b) => b.netIncome - a.netIncome)
-              .map((b, i) => (
-                <tr key={b.name} className="border-b hover:bg-gray-50">
-                  <td className="py-2">{i + 1}</td>
-                  <td>{b.name}</td>
-                  <td className="text-right">{b.netIncome}</td>
-                  <td className="text-right">{b.roe}</td>
-                  <td className="text-right">{b.roa}</td>
-                  <td className="text-right">{b.costToIncome}</td>
-                  <td className="text-right">{b.npl}</td>
-                  <td className="text-right">{b.liquidity}</td>
-                </tr>
-              ))}
-          </tbody>
-        </table>
-      </div>
-
-      {/* Radar Chart */}
-      <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-200">
-        <h2 className="text-lg font-semibold text-gray-900 mb-4">Performance Radar</h2>
-        <ResponsiveContainer width="100%" height={350}>
-          <ReRadarChart cx="50%" cy="50%" outerRadius="80%" data={radarData}>
-            <PolarGrid />
-            <PolarAngleAxis dataKey="bank" />
-            <PolarRadiusAxis angle={30} domain={[0, 100]} />
-            <ReRadar name="Performance" dataKey="CASA" stroke="#2563EB" fill="#3B82F6" fillOpacity={0.4} />
-            <Legend />
-          </ReRadarChart>
-        </ResponsiveContainer>
-      </div>
-
-      {/* Line Chart */}
-      <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-200">
-        <h2 className="text-lg font-semibold text-gray-900 mb-4">Net Income Trends (8 Quarters)</h2>
-        <ResponsiveContainer width="100%" height={300}>
-          <ReLineChart data={quarterlyTrends}>
-            <XAxis dataKey="quarter" />
-            <YAxis />
-            <Tooltip />
-            <Line type="monotone" dataKey="Zenith" stroke="#2563EB" />
-            <Line type="monotone" dataKey="GTCO" stroke="#16A34A" />
-            <Line type="monotone" dataKey="Access" stroke="#DF5622" />
-            <Line type="monotone" dataKey="UBA" stroke="#EAB308" />
-            <Line type="monotone" dataKey="First" stroke="#9333EA" />
-          </ReLineChart>
-        </ResponsiveContainer>
-      </div>
-
-      {/* Scatter Plot */}
-      <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-200">
-        <h2 className="text-lg font-semibold text-gray-900 mb-4">
-          NPL vs Capital Adequacy (Bubble = Assets)
-        </h2>
-        <ResponsiveContainer width="100%" height={350}>
-          <ScatterChart>
-            <CartesianGrid />
-            <XAxis dataKey="npl" name="NPL Ratio" unit="%" />
-            <YAxis dataKey="capitalAdequacy" name="Capital Adequacy" unit="%" />
-            <ZAxis dataKey="assets" range={[100, 600]} />
-            <Tooltip cursor={{ strokeDasharray: "3 3" }} />
-            <Scatter data={scatterData} fill="#2563EB" />
-          </ScatterChart>
-        </ResponsiveContainer>
-      </div>
-    </div>
+    </SectionCard>
   );
 };
 
