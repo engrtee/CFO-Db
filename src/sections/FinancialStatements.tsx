@@ -13,11 +13,11 @@ function Row({ label, value, bold, indent, highlight }: {
 }) {
   return (
     <tr className={`border-b border-gt-border ${highlight ? 'bg-gt-orange/5' : 'hover:bg-gt-card2'} transition-colors`}>
-      <td className={`px-4 py-2.5 text-xs ${bold ? 'font-bold text-white' : 'text-gt-muted'}`}
+      <td className={`px-4 py-2.5 text-xs ${bold ? 'font-bold text-gt-text' : 'text-gt-muted'}`}
         style={{ paddingLeft: `${16 + (indent ?? 0) * 16}px` }}>
         {label}
       </td>
-      <td className={`px-4 py-2.5 text-right font-mono text-xs ${bold ? 'font-bold text-white' : 'text-white'}`}>
+      <td className={`px-4 py-2.5 text-right font-mono text-xs ${bold ? 'font-bold text-gt-text' : 'text-gt-text'}`}>
         {value}
       </td>
     </tr>
@@ -184,7 +184,7 @@ const Notes: React.FC<{ data: ReturnType<typeof useDb>['data'] }> = ({ data }) =
         {noteRows.map((row: any, i) => (
           <tr key={i} className="border-b border-gt-border hover:bg-gt-card2 transition-colors">
             <td className="px-4 py-3 text-xs font-semibold text-gt-orange">{row.label}</td>
-            <td className="px-4 py-3 text-xs text-white leading-relaxed">{row.value}</td>
+            <td className="px-4 py-3 text-xs text-gt-text leading-relaxed">{row.value}</td>
           </tr>
         ))}
       </tbody>
@@ -209,7 +209,7 @@ const FinancialStatements: React.FC = () => {
       {/* Page header */}
       <div className="flex items-center justify-between flex-wrap gap-3">
         <div>
-          <h1 className="text-lg font-bold text-white uppercase tracking-wide">Financial Statements</h1>
+          <h1 className="text-lg font-bold text-gt-text uppercase tracking-wide">Financial Statements</h1>
           <p className="text-xs text-gt-muted mt-0.5">
             Guaranty Trust Bank Plc · FY 2024 · IFRS · ₦bn
             {usingMock && <span className="ml-2 text-gt-amber font-medium">[Demo mode]</span>}
@@ -219,12 +219,12 @@ const FinancialStatements: React.FC = () => {
           <span className="text-xs text-gt-muted hidden md:block">Synced: {syncedStr}</span>
           <button
             onClick={() => window.print()}
-            className="flex items-center gap-1.5 px-3 py-1.5 border border-gt-border text-gt-muted hover:text-white hover:border-white text-xs font-medium rounded-lg transition-colors"
+            className="flex items-center gap-1.5 px-3 py-1.5 border border-gt-border text-gt-muted hover:text-gt-text hover:border-white text-xs font-medium rounded-lg transition-colors"
           >
             <Printer className="w-3.5 h-3.5" />
             Print
           </button>
-          <button className="flex items-center gap-1.5 px-3 py-1.5 bg-gt-orange hover:bg-gt-orangeD text-white text-xs font-semibold rounded-lg transition-colors">
+          <button className="flex items-center gap-1.5 px-3 py-1.5 bg-gt-orange hover:bg-gt-orangeD text-gt-text text-xs font-semibold rounded-lg transition-colors">
             <Download className="w-3.5 h-3.5" />
             Export Excel
           </button>
@@ -241,8 +241,8 @@ const FinancialStatements: React.FC = () => {
               onClick={() => setTab(t.id)}
               className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-medium transition-colors ${
                 tab === t.id
-                  ? 'bg-gt-orange text-white'
-                  : 'text-gt-muted hover:text-white hover:bg-gt-card2'
+                  ? 'bg-gt-orange text-gt-text'
+                  : 'text-gt-muted hover:text-gt-text hover:bg-gt-card2'
               }`}
             >
               <Icon className="w-3.5 h-3.5" />

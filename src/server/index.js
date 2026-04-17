@@ -130,9 +130,13 @@ async function computeKPIs(state) {
   const shareCap       = Math.abs(sums.share_capital);
   const reserves       = Math.abs(sums.reserves);
   const tier1          = Math.abs(sums.tier1);
-  const equity         = shareCap + reserves + tier1;
+  // Full equity includes opening equity accounts + current-year PAT (pre-closing TB)
+  const equityOpening  = shareCap + reserves + tier1;
+  const equity         = equityOpening + pat;
 
   const totalDeposits  = custDeposits + bankDeposits;
+
+  const SHARES = 29_430_000_000;  // GTBank 29.43bn shares outstanding
 
   // Ratios
   const nim  = loans > 0 ? (nii / loans) * 100 : 0;
@@ -140,7 +144,7 @@ async function computeKPIs(state) {
   const roa  = totalAssets > 0 ? (pat / totalAssets) * 100 : 0;
   const cir  = revenue > 0 ? (totalOpex / revenue) * 100 : 0;
   const ldr  = totalDeposits > 0 ? (loans / totalDeposits) * 100 : 0;
-  const nplRatio = loans > 0 ? (provisions / loans) * 100 : 0;  // proxy
+  const nplRatio = loans > 0 ? (provisions / loans) * 100 : 0;  // cost-of-risk proxy
 
   return {
     interestIncome, interestExpense, nii,
@@ -151,8 +155,8 @@ async function computeKPIs(state) {
     custDeposits, bankDeposits, borrowings, otherLiabs, totalLiabs,
     shareCap, reserves, tier1, equity, totalDeposits,
     nim, roe, roa, cir, ldr, nplRatio,
-    eps: equity > 0 ? (pat / 3_500_000_000) : 0,  // assume ~3.5bn shares
-    bookValue: equity > 0 ? (equity / 3_500_000_000) * 1e9 : 0,
+    eps: pat / SHARES,
+    bookValue: equity / SHARES,
   };
 }
 
@@ -187,7 +191,7 @@ app.post('/api/sync', async (req, res) => {
 });
 
 // ── Reset (after → before) ────────────────────────────────────────────────────
-app.post('/api/reset', async (req, res) => {
+app.post('/api/reset-state', async (req, res) => {
   try {
     await query(
       `UPDATE current_state SET active_state = 'before', last_synced = NOW() WHERE id = 1`
@@ -195,6 +199,56 @@ app.post('/api/reset', async (req, res) => {
     const state = await getActiveState();
     res.json({ success: true, ...state });
   } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
+// ── Sync from CaseWare (API trigger) ──────────────────────────────────────────
+app.post('/api/sync-caseware', async (req, res) => {
+  try {
+    const watchDir = 'C:\\Users\\USER\\Zenith\\Communication site - Documents\\CasewareExport';
+    
+    // Check if directory exists
+    if (!fs.existsSync(watchDir)) {
+      return res.status(404).json({ error: 'SharePoint CasewareExport folder not found.' });
+    }
+
+    // Find the most recently modified .xlsx file
+    const files = fs.readdirSync(watchDir)
+      .filter(f => f.endsWith('.xlsx') && !f.startsWith('~$'))
+      .map(f => ({
+        name: f,
+        path: path.join(watchDir, f),
+        time: fs.statSync(path.join(watchDir, f)).mtime.getTime()
+      }))
+      .sort((a, b) => b.time - a.time);
+
+    if (files.length === 0) {
+      return res.status(404).json({ error: 'No .xlsx file found in the CaseWare export folder.' });
+    }
+
+    const latestFile = files[0].path;
+    const scriptPath = path.join(__dirname, '..', '..', 'caseware_ingest.py');
+    const dbUrl = 'postgresql://postgres:password@localhost:5432/FinancialDB';
+    
+    exec(`python "${scriptPath}" "${latestFile}" "${dbUrl}"`, async (err, stdout, stderr) => {
+      if (err) {
+        console.error('Ingestion error stdout:', stdout);
+        console.error('Ingestion error stderr:', stderr);
+        return res.status(500).json({ error: 'Ingestion script failed', detail: stderr });
+      }
+
+      // Read updated state to return to client
+      const state = await getActiveState();
+      
+      // Attempt to extract row count from the stdout for the toast notification
+      const match = stdout.match(/Rows ingested: (\d+)/);
+      const rowsIngested = match ? parseInt(match[1]) : 0;
+      
+      res.json({ success: true, rowsIngested, message: stdout.trim(), ...state });
+    });
+  } catch (e) {
+    console.error('Sync error:', e);
     res.status(500).json({ error: e.message });
   }
 });
@@ -449,21 +503,32 @@ app.get('/api/admin/ingestion-log', async (req, res) => {
 });
 
 // ── Admin: Manual file upload & re-ingest ─────────────────────────────────────
-app.post('/api/admin/upload', upload.single('file'), async (req, res) => {
+async function runUploadIngest(req, res) {
   if (!req.file) return res.status(400).json({ error: 'No file uploaded' });
 
-  const destPath = path.join(__dirname, '..', '..', 'Gtbank', req.file.originalname);
+  const uploadsDir = path.join(__dirname, 'uploads');
+  if (!fs.existsSync(uploadsDir)) fs.mkdirSync(uploadsDir, { recursive: true });
+
+  // Save uploaded file next to the ingest script
+  const destPath = path.join(__dirname, '..', '..', req.file.originalname);
   fs.renameSync(req.file.path, destPath);
 
-  const scriptPath = path.join(__dirname, '..', '..', 'ingest_data.py');
-  exec(`python "${scriptPath}"`, (err, stdout, stderr) => {
+  const scriptPath = path.join(__dirname, '..', '..', 'caseware_ingest.py');
+  const dbUrl      = 'postgresql://postgres:password@localhost:5432/FinancialDB';
+
+  exec(`python "${scriptPath}" "${destPath}" "${dbUrl}"`, (err, stdout, stderr) => {
     if (err) {
       console.error(stderr);
       return res.status(500).json({ error: 'Ingestion failed', detail: stderr });
     }
-    res.json({ success: true, message: stdout.trim() });
+    const match       = stdout.match(/Rows ingested: (\d+)/);
+    const rowsIngested = match ? parseInt(match[1]) : 0;
+    res.json({ success: true, rows_ingested: rowsIngested, message: stdout.trim() });
   });
-});
+}
+
+app.post('/api/admin/upload', upload.single('file'), runUploadIngest);
+app.post('/api/upload',       upload.single('file'), runUploadIngest);  // alias used by AdminPage
 
 // ── Existing AI report route (kept from original) ─────────────────────────────
 app.post('/api/ai-report', async (req, res) => {

@@ -87,7 +87,7 @@ const DownloadCenter: React.FC = () => {
               onClick={() => setSelectedCategory(category)}
               className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                 selectedCategory === category
-                  ? 'bg-red-600 text-white'
+                  ? 'bg-red-600 text-gt-text'
                   : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
               }`}
             >
@@ -157,7 +157,7 @@ const DownloadCenter: React.FC = () => {
                       </span>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-center">
-                      <button className="inline-flex items-center gap-2 px-3 py-2 bg-red-600 text-white text-sm font-medium rounded-lg hover:bg-red-700 transition-colors">
+                      <button className="inline-flex items-center gap-2 px-3 py-2 bg-red-600 text-gt-text text-sm font-medium rounded-lg hover:bg-red-700 transition-colors">
                         <Download className="w-4 h-4" />
                         Download
                       </button>

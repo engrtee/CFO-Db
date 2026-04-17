@@ -101,7 +101,7 @@ const PerformanceManagement: React.FC = () => {
           <div className="flex gap-1 bg-gray-100 rounded-lg p-1">
             {(["MTD", "YTD", "SPLY"] as const).map((m) => (
               <button key={m} onClick={() => setViewMode(m)}
-                className={`px-3 py-1 text-xs font-semibold rounded-md transition-all ${viewMode === m ? 'bg-amber-700 text-white' : 'text-gray-600 hover:text-gray-900'}`}>
+                className={`px-3 py-1 text-xs font-semibold rounded-md transition-all ${viewMode === m ? 'bg-amber-700 text-gt-text' : 'text-gray-600 hover:text-gray-900'}`}>
                 {m}
               </button>
             ))}

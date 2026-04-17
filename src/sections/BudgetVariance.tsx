@@ -14,7 +14,7 @@ const DkTooltip = ({ active, payload, label }: any) => {
   if (!active || !payload?.length) return null;
   return (
     <div className="bg-gt-card2 border border-gt-border rounded-xl shadow-lg p-3 text-xs max-w-[200px]">
-      <p className="font-semibold text-white mb-2 leading-snug">{label}</p>
+      <p className="font-semibold text-gt-text mb-2 leading-snug">{label}</p>
       {payload.map((p: any) => (
         <p key={p.name} style={{ color: p.color }} className="flex justify-between gap-4">
           <span>{p.name}</span><span className="font-mono">₦{p.value?.toFixed(1)}bn</span>
@@ -134,7 +134,7 @@ const BudgetVariance: React.FC = () => {
                 const fav = r.variance_ngn >= 0;
                 return (
                   <tr key={r.id} className="hover:bg-gt-card2 transition-colors">
-                    <td className="px-4 py-2.5 text-white font-medium whitespace-nowrap">{r.line_item}</td>
+                    <td className="px-4 py-2.5 text-gt-text font-medium whitespace-nowrap">{r.line_item}</td>
                     <td className="px-4 py-2.5 text-gt-muted font-mono text-xs">{r.budget_amount.toFixed(1)}</td>
                     <td className="px-4 py-2.5 text-gt-muted font-mono text-xs">{r.actual_amount.toFixed(1)}</td>
                     <td className={`px-4 py-2.5 font-mono text-xs font-semibold ${fav ? 'text-gt-green' : 'text-gt-red'}`}>

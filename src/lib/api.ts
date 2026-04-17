@@ -19,7 +19,8 @@ export interface AppState {
 
 export const getState    = ()       => req<AppState>('/state');
 export const syncDB      = ()       => req<AppState & { success: boolean }>('/sync',  { method: 'POST' });
-export const resetDB     = ()       => req<AppState & { success: boolean }>('/reset', { method: 'POST' });
+export const syncCaseware= ()       => req<AppState & { success: boolean; rowsIngested?: number }>('/sync-caseware', { method: 'POST' });
+export const resetDB     = ()       => req<AppState & { success: boolean }>('/reset-state', { method: 'POST' });
 export const getDashboard= ()       => req<any>('/dashboard');
 export const getFS       = ()       => req<any>('/financial-statements');
 export const getGLRows   = ()       => req<any>('/gl-balances');

@@ -67,7 +67,7 @@ const PeriodFilter: React.FC<PeriodFilterProps> = ({
             onClick={() => onPeriodChange(key)}
             className={`px-3 py-1 text-sm font-medium rounded-md transition-all ${
               selectedPeriod === key
-                ? 'bg-amber-700 text-white shadow-sm'
+                ? 'bg-amber-700 text-gt-text shadow-sm'
                 : 'text-gray-600 hover:text-gray-900'
             }`}
           >

@@ -44,7 +44,7 @@ function Gauge({ value, max = 200, threshold = 100, label }: GaugeProps) {
         <text x={14}  y={134}  fontSize={9} fill="#AAA">0</text>
         <text x={165} y={134}  fontSize={9} fill="#AAA" textAnchor="end">{max}%</text>
       </svg>
-      <p className="text-sm font-semibold text-white -mt-1">{label}</p>
+      <p className="text-sm font-semibold text-gt-text -mt-1">{label}</p>
       <span className={`mt-1 text-xs px-2 py-0.5 rounded-full font-medium ${isGood ? 'bg-gt-green/15 text-gt-green' : 'bg-gt-red/15 text-gt-red'}`}>
         {isGood ? '✓ Above minimum' : '✗ Below minimum'}
       </span>
@@ -56,7 +56,7 @@ const DkTooltip = ({ active, payload, label }: any) => {
   if (!active || !payload?.length) return null;
   return (
     <div className="bg-gt-card2 border border-gt-border rounded-xl shadow-lg p-3 text-xs">
-      <p className="font-semibold text-white mb-1">{label}</p>
+      <p className="font-semibold text-gt-text mb-1">{label}</p>
       {payload.map((p: any) => (
         <p key={p.name} style={{ color: p.color }} className="flex justify-between gap-4">
           <span>{p.name}</span><span className="font-mono">{p.value?.toFixed(1)}%</span>
@@ -104,7 +104,7 @@ const LiquidityFunding: React.FC = () => {
           ].map((m) => (
             <div key={m.label} className={`rounded-xl border p-3 ${m.good ? 'border-gt-border bg-gt-card2' : 'border-gt-amber/30 bg-gt-amber/5'}`}>
               <p className="text-xs font-medium text-gt-muted uppercase tracking-wide leading-tight">{m.label}</p>
-              <p className="text-lg font-bold text-white mt-1">{m.value}</p>
+              <p className="text-lg font-bold text-gt-text mt-1">{m.value}</p>
               <p className={`text-xs mt-0.5 ${m.good ? 'text-gt-muted' : 'text-gt-amber'}`}>{m.note}</p>
             </div>
           ))}

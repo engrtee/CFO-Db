@@ -8,17 +8,17 @@ export default {
           orange:  '#F58220',
           orangeD: '#D96E15',   // darker shade for hover
           black:   '#000000',
-          dark:    '#0D0D0D',
-          bg:      '#121212',
-          card:    '#1E1E1E',
-          card2:   '#272727',
-          border:  '#333333',
-          text:    '#FFFFFF',
-          muted:   '#AAAAAA',
-          amber:   '#FFA500',
-          red:     '#E02020',
-          green:   '#27AE60',
-          grey:    '#F5F5F5',
+          dark:    '#1A1A1A',
+          bg:      '#F4F5F7',   // light page background
+          card:    '#FFFFFF',   // white cards
+          card2:   '#F9FAFB',   // slightly off-white secondary
+          border:  '#E2E5EA',   // light border
+          text:    '#111827',   // near-black body text
+          muted:   '#6B7280',   // grey muted text
+          amber:   '#D97706',   // amber (darker for light bg)
+          red:     '#DC2626',   // red
+          green:   '#16A34A',   // green
+          grey:    '#F3F4F6',
         },
       },
       fontFamily: {

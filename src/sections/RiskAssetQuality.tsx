@@ -41,7 +41,7 @@ const PieTooltip = ({ active, payload }: any) => {
   return (
     <div className="bg-gt-card2 border border-gt-border rounded-xl shadow-lg p-3 text-xs">
       <p style={{ color: d.payload.fill }} className="font-semibold">{d.name}</p>
-      <p className="text-white mt-0.5">₦{d.value?.toFixed(0)}bn</p>
+      <p className="text-gt-text mt-0.5">₦{d.value?.toFixed(0)}bn</p>
       <p className="text-gt-muted">{((d.value / d.payload.total) * 100).toFixed(1)}% of loan book</p>
     </div>
   );
@@ -114,7 +114,7 @@ const RiskAssetQuality: React.FC = () => {
                       className="h-full rounded-full flex items-center px-2 transition-all duration-500"
                       style={{ width: `${barW}%`, backgroundColor: barColor }}
                     >
-                      <span className="text-white text-xs font-medium whitespace-nowrap">{pct(r.npl_ratio)}</span>
+                      <span className="text-gt-text text-xs font-medium whitespace-nowrap">{pct(r.npl_ratio)}</span>
                     </div>
                   </div>
                   <span className="text-xs text-gt-muted w-20 shrink-0 text-right">Cov: {pct(r.npl_coverage)}</span>
@@ -125,7 +125,7 @@ const RiskAssetQuality: React.FC = () => {
 
           <div className="mt-4 p-3 bg-gt-amber/10 border border-gt-amber/30 rounded-xl">
             <p className="text-xs font-semibold text-gt-amber mb-1">Watchlist Exposure</p>
-            <p className="text-lg font-bold text-white">{bn(latest.watchlist_exposure)}</p>
+            <p className="text-lg font-bold text-gt-text">{bn(latest.watchlist_exposure)}</p>
             <p className="text-xs text-gt-muted">
               Prior: {bn(prev.watchlist_exposure)} —{' '}
               {latest.watchlist_exposure < prev.watchlist_exposure ? '↓ improving' : '↑ elevated'}

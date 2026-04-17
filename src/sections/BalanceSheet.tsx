@@ -14,7 +14,7 @@ function KpiCard({ label, value, change, note }: KpiCardProps) {
   return (
     <div className="rounded-xl border border-gt-border bg-gt-card2 p-4">
       <p className="text-xs font-medium text-gt-muted uppercase tracking-wide">{label}</p>
-      <p className="text-xl font-bold text-white mt-1">{value}</p>
+      <p className="text-xl font-bold text-gt-text mt-1">{value}</p>
       <div className="flex items-center gap-1 mt-1">
         <TrendingUp className={`w-3 h-3 ${good ? 'text-gt-green' : 'text-gt-red'}`} />
         <span className={`text-xs font-medium ${good ? 'text-gt-green' : 'text-gt-red'}`}>
@@ -30,7 +30,7 @@ const DkTooltip = ({ active, payload, label }: any) => {
   if (!active || !payload?.length) return null;
   return (
     <div className="bg-gt-card2 border border-gt-border rounded-xl shadow-lg p-3 text-xs">
-      <p className="font-semibold text-white mb-2">{label}</p>
+      <p className="font-semibold text-gt-text mb-2">{label}</p>
       {payload.map((p: any) => (
         <p key={p.name} style={{ color: p.color }} className="flex justify-between gap-4">
           <span>{p.name}</span>

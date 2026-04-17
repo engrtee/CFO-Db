@@ -5,6 +5,7 @@ import {
   Building2, Target, Activity, Users, ArrowUpRight, PieChart,
 } from 'lucide-react';
 import { useDb } from '../lib/DbContext';
+import { fmtNGN, fmtNGNShort, fmtPct, pctChange } from '../lib/fmt';
 
 function StatBadge({ val, good }: { val: number; good: boolean }) {
   const sign = val >= 0 ? '+' : '';
@@ -28,14 +29,14 @@ function Panel({ path, icon: Icon, label, kpis, rag }: PanelProps) {
   return (
     <Link
       to={path}
-      className="group bg-gt-card border border-gt-border rounded-2xl hover:border-gt-orange transition-all duration-200 p-5 flex flex-col gap-4 cursor-pointer shadow-lg"
+      className="group bg-gt-card border border-gt-border rounded-2xl hover:border-gt-orange transition-all duration-200 p-5 flex flex-col gap-4 cursor-pointer shadow-sm"
     >
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-xl bg-gt-orange/15 flex items-center justify-center">
+          <div className="w-8 h-8 rounded-xl bg-gt-orange/10 flex items-center justify-center">
             <Icon className="w-4 h-4 text-gt-orange" />
           </div>
-          <span className="text-sm font-semibold text-white">{label}</span>
+          <span className="text-sm font-semibold text-gt-text">{label}</span>
         </div>
         <div className="flex items-center gap-2">
           {ragDot && <span className={`w-2 h-2 rounded-full ${ragDot}`} />}
@@ -49,7 +50,7 @@ function Panel({ path, icon: Icon, label, kpis, rag }: PanelProps) {
           return (
             <div key={k.label} className="flex flex-col gap-0.5">
               <span className="text-xs text-gt-muted truncate">{k.label}</span>
-              <span className="text-sm font-bold text-white truncate">{k.value}</span>
+              <span className="text-sm font-bold text-gt-text truncate">{k.value}</span>
               {k.change !== undefined && chg !== null && (
                 <StatBadge val={k.change} good={chg} />
               )}
@@ -62,7 +63,7 @@ function Panel({ path, icon: Icon, label, kpis, rag }: PanelProps) {
 }
 
 const BankOverview: React.FC = () => {
-  const { data, lastSynced } = useDb();
+  const { data, kpis, lastSynced } = useDb();
 
   const fp  = data.financial_performance;
   const bs  = data.balance_sheet;
@@ -81,35 +82,43 @@ const BankOverview: React.FC = () => {
   const cmL = cm[cm.length - 1];  const cmP = cm[cm.length - 2];
   const siL = si[si.length - 1];
 
-  const pct = (cur: number, prv: number) => ((cur - prv) / prv) * 100;
+  // In mock mode sum all monthly rows so "Annual Revenue/PAT" shows full-year figures
+  const totalRevenue = kpis.revenue    ?? fp.reduce((s, r) => s + r.revenue, 0);
+  const totalPAT     = kpis.pat        ?? fp.reduce((s, r) => s + r.pat, 0);
+  const totalAssets  = kpis.totalAssets ?? bsL.total_assets;
+  const nplRatio     = kpis.nplRatio   ?? riL.npl_ratio;
+  const nplCoverage  = riL.npl_coverage;
+  // Annual EPS = full-year PAT / 29.43bn shares; annual for P/E calculation
+  const SHARES_BN    = 29.43;
+  const annualEPS    = (kpis.pat ?? fp.reduce((s, r) => s + r.pat, 0)) / (SHARES_BN * 1e9);
 
   const panels: PanelProps[] = [
     {
       path: '/financial-performance', icon: TrendingUp, label: 'Financial Performance',
       kpis: [
-        { label: 'Revenue', value: `₦${fpL.revenue.toFixed(1)}bn`, change: pct(fpL.revenue, fpP.revenue) },
-        { label: 'PAT',     value: `₦${fpL.pat.toFixed(1)}bn`,     change: pct(fpL.pat, fpP.pat) },
-        { label: 'ROE',     value: `${fpL.roe.toFixed(1)}%`,        change: pct(fpL.roe, fpP.roe) },
-        { label: 'NIM',     value: `${fpL.nim.toFixed(1)}%`,        change: pct(fpL.nim, fpP.nim) },
+        { label: 'Revenue', value: fmtNGNShort(fpL.revenue), change: pctChange(fpL.revenue, fpP.revenue) },
+        { label: 'PAT',     value: fmtNGNShort(fpL.pat),     change: pctChange(fpL.pat, fpP.pat) },
+        { label: 'ROE',     value: fmtPct(fpL.roe),          change: fpL.roe - fpP.roe },
+        { label: 'NIM',     value: fmtPct(fpL.nim),          change: fpL.nim - fpP.nim },
       ],
     },
     {
       path: '/balance-sheet', icon: Landmark, label: 'Balance Sheet',
       kpis: [
-        { label: 'Total Assets', value: `₦${(bsL.total_assets / 1000).toFixed(2)}tn`, change: bsL.growth_rate_vs_prior },
-        { label: 'Loan Book',    value: `₦${(bsL.loan_book / 1000).toFixed(2)}tn`,    change: pct(bsL.loan_book, bsP.loan_book) },
-        { label: 'Deposits',     value: `₦${(bsL.deposit_base / 1000).toFixed(2)}tn`, change: pct(bsL.deposit_base, bsP.deposit_base) },
-        { label: 'Equity',       value: `₦${bsL.equity.toFixed(0)}bn`,                 change: pct(bsL.equity, bsP.equity) },
+        { label: 'Total Assets', value: fmtNGN(bsL.total_assets),  change: bsL.growth_rate_vs_prior },
+        { label: 'Loan Book',    value: fmtNGN(bsL.loan_book),     change: pctChange(bsL.loan_book, bsP.loan_book) },
+        { label: 'Deposits',     value: fmtNGN(bsL.deposit_base),  change: pctChange(bsL.deposit_base, bsP.deposit_base) },
+        { label: 'Equity',       value: fmtNGN(bsL.equity),        change: pctChange(bsL.equity, bsP.equity) },
       ],
     },
     {
       path: '/risk-quality', icon: ShieldAlert, label: 'Risk & Asset Quality',
       rag: riL.npl_ratio <= 5 ? 'green' : riL.npl_ratio <= 7 ? 'amber' : 'red',
       kpis: [
-        { label: 'NPL Ratio',    value: `${riL.npl_ratio.toFixed(1)}%`,    change: riL.npl_ratio - ri[ri.length - 2].npl_ratio, goodUp: false },
-        { label: 'Coverage',     value: `${riL.npl_coverage.toFixed(1)}%` },
-        { label: 'Cost of Risk', value: `${riL.cost_of_risk.toFixed(1)}%`, change: riL.cost_of_risk - ri[ri.length - 2].cost_of_risk, goodUp: false },
-        { label: 'Provisions',   value: `₦${riL.provisions.toFixed(1)}bn` },
+        { label: 'NPL Ratio',    value: fmtPct(riL.npl_ratio),    change: riL.npl_ratio - ri[ri.length - 2].npl_ratio, goodUp: false },
+        { label: 'Coverage',     value: fmtPct(riL.npl_coverage) },
+        { label: 'Cost of Risk', value: fmtPct(riL.cost_of_risk), change: riL.cost_of_risk - ri[ri.length - 2].cost_of_risk, goodUp: false },
+        { label: 'Provisions',   value: fmtNGNShort(riL.provisions) },
       ],
     },
     {
@@ -118,17 +127,17 @@ const BankOverview: React.FC = () => {
       kpis: [
         { label: 'LCR',           value: `${lmL.lcr}%`,  change: lmL.lcr - lm[lm.length - 2].lcr },
         { label: 'NSFR',          value: `${lmL.nsfr}%`, change: lmL.nsfr - lm[lm.length - 2].nsfr },
-        { label: 'LDR',           value: `${lmL.loan_to_deposit_ratio.toFixed(1)}%` },
+        { label: 'LDR',           value: fmtPct(lmL.loan_to_deposit_ratio) },
         { label: 'Retail Funding',value: `${lmL.retail_funding_pct}%` },
       ],
     },
     {
       path: '/treasury-market', icon: Building2, label: 'Treasury & Market Risk',
       kpis: [
-        { label: 'Portfolio',    value: `₦${tmL.portfolio_value.toFixed(0)}bn`, change: pct(tmL.portfolio_value, tm[tm.length - 2].portfolio_value) },
-        { label: 'Sec. Yield',  value: `${tmL.yield_on_securities.toFixed(1)}%` },
+        { label: 'Portfolio',    value: fmtNGN(tmL.portfolio_value), change: pctChange(tmL.portfolio_value, tm[tm.length - 2].portfolio_value) },
+        { label: 'Sec. Yield',  value: fmtPct(tmL.yield_on_securities) },
         { label: 'FX USD Exp.', value: `$${tmL.fx_usd_exposure}mn` },
-        { label: 'NII at Risk', value: `₦${tmL.nii_at_risk.toFixed(1)}bn` },
+        { label: 'NII at Risk', value: fmtNGNShort(tmL.nii_at_risk) },
       ],
     },
     {
@@ -139,44 +148,44 @@ const BankOverview: React.FC = () => {
         { label: '🟢 On/Above',  value: `${bva.filter(r => r.rag_status === 'Green').length} lines` },
         { label: '🟡 Watch',     value: `${bva.filter(r => r.rag_status === 'Amber').length} lines` },
         { label: '🔴 Adverse',   value: `${bva.filter(r => r.rag_status === 'Red').length} lines` },
-        { label: 'Net Variance', value: `+₦${bva.reduce((s, r) => s + r.variance_ngn, 0).toFixed(1)}bn` },
+        { label: 'Net Variance', value: fmtNGNShort(bva.reduce((s, r) => s + r.variance_ngn, 0)) },
       ],
     },
     {
       path: '/cost-operational', icon: Activity, label: 'Cost & Operations',
       rag: cmL.cost_to_income_ratio < 50 ? 'green' : cmL.cost_to_income_ratio < 55 ? 'amber' : 'red',
       kpis: [
-        { label: 'CIR',        value: `${cmL.cost_to_income_ratio.toFixed(1)}%`, change: cmL.cost_to_income_ratio - cmP.cost_to_income_ratio, goodUp: false },
-        { label: 'Total OpEx', value: `₦${cmL.total_opex.toFixed(1)}bn` },
-        { label: 'Staff Cost', value: `₦${cmL.staff_cost.toFixed(1)}bn` },
+        { label: 'CIR',        value: fmtPct(cmL.cost_to_income_ratio), change: cmL.cost_to_income_ratio - cmP.cost_to_income_ratio, goodUp: false },
+        { label: 'Total OpEx', value: fmtNGNShort(cmL.total_opex) },
+        { label: 'Staff Cost', value: fmtNGNShort(cmL.staff_cost) },
         { label: 'Headcount',  value: cmL.headcount.toLocaleString('en-NG') },
       ],
     },
     {
       path: '/segment-insights', icon: Users, label: 'Segment Insights',
       kpis: [
-        { label: 'Active Customers', value: `${siL.total_active_customers.toFixed(2)}mn`, change: pct(siL.total_active_customers, si[si.length - 2].total_active_customers) },
-        { label: 'New Customers',    value: `${siL.new_customers}k` },
-        { label: 'Retail Rev.',      value: `₦${siL.retail_revenue.toFixed(1)}bn` },
-        { label: 'Corp. Rev.',       value: `₦${siL.corporate_revenue.toFixed(1)}bn` },
+        { label: 'Customers',  value: `${siL.total_active_customers.toFixed(2)}mn`, change: pctChange(siL.total_active_customers, si[si.length - 2].total_active_customers) },
+        { label: 'New Cust.',  value: `${siL.new_customers}k` },
+        { label: 'Retail Rev.',value: fmtNGNShort(siL.retail_revenue) },
+        { label: 'Corp. Rev.', value: fmtNGNShort(siL.corporate_revenue) },
       ],
     },
     {
       path: '/investor', icon: PieChart, label: 'Investor Relations',
       kpis: [
-        { label: 'EPS',            value: `₦${(fp.reduce((s, r) => s + r.pat, 0) / 29.43).toFixed(2)}` },
-        { label: 'ROE',            value: `${fpL.roe.toFixed(1)}%` },
+        { label: 'Annual EPS',     value: `₦${annualEPS.toFixed(2)}` },
+        { label: 'ROE',            value: fmtPct(fpL.roe) },
         { label: 'Dividend Yield', value: '4.2%' },
-        { label: 'P/E Ratio',      value: `${(50.65 / (fp.reduce((s, r) => s + r.pat, 0) / 29.43)).toFixed(1)}×` },
+        { label: 'P/E Ratio',      value: `${(50.65 / Math.max(annualEPS, 0.01)).toFixed(1)}×` },
       ],
     },
     {
       path: '/competitor', icon: TrendingUp, label: 'Competitor Analysis',
       kpis: [
-        { label: 'GTBank ROE',    value: '35.2%', change: 35.2 - 30.1 },
-        { label: 'GTBank CIR',   value: '34.2%', change: -(34.2 - 40.5), goodUp: false },
-        { label: 'GTBank NPL',   value: '3.1%',  change: -(3.1 - 4.2), goodUp: false },
-        { label: 'Peer Rank',    value: '#1 ROE' },
+        { label: 'GTBank ROE',  value: fmtPct(fpL.roe),          change: fpL.roe - 30.1 },
+        { label: 'GTBank CIR',  value: fmtPct(cmL.cost_to_income_ratio), change: -(cmL.cost_to_income_ratio - 40.5), goodUp: false },
+        { label: 'GTBank NPL',  value: fmtPct(riL.npl_ratio),   change: -(riL.npl_ratio - 4.2), goodUp: false },
+        { label: 'Peer Rank',   value: '#1 ROE' },
       ],
     },
   ];
@@ -186,7 +195,7 @@ const BankOverview: React.FC = () => {
       {/* Page header */}
       <div className="flex items-start justify-between flex-wrap gap-3">
         <div>
-          <h1 className="text-xl font-bold text-white uppercase tracking-wide">CFO Executive Dashboard</h1>
+          <h1 className="text-xl font-bold text-gt-text uppercase tracking-wide">CFO Executive Dashboard</h1>
           <p className="text-xs text-gt-muted mt-0.5">
             Guaranty Trust Bank Plc · FY 2024 · All figures in NGN
           </p>
@@ -199,31 +208,31 @@ const BankOverview: React.FC = () => {
         </div>
       </div>
 
-      {/* Top headline KPIs */}
+      {/* Top headline KPIs — sourced directly from real GL data via kpis object */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
         {[
           {
             label: 'Annual Revenue', color: 'text-gt-orange',
-            value: `₦${fp.reduce((s, r) => s + r.revenue, 0).toFixed(1)}bn`,
-            sub: 'FY 2024 total',
+            value: fmtNGN(totalRevenue),
+            sub: 'FY 2024 total interest + non-interest',
           },
           {
             label: 'Annual PAT', color: 'text-gt-green',
-            value: `₦${fp.reduce((s, r) => s + r.pat, 0).toFixed(1)}bn`,
+            value: fmtNGN(totalPAT),
             sub: 'Net profit after tax',
           },
           {
-            label: 'Total Assets', color: 'text-white',
-            value: `₦${(bsL.total_assets / 1000).toFixed(2)}tn`,
+            label: 'Total Assets', color: 'text-gt-text',
+            value: fmtNGN(totalAssets),
             sub: `Q4 2024 — ${bsL.growth_rate_vs_prior.toFixed(1)}% QoQ`,
           },
           {
-            label: 'NPL Ratio', color: riL.npl_ratio <= 6 ? 'text-gt-green' : 'text-gt-red',
-            value: `${riL.npl_ratio.toFixed(1)}%`,
-            sub: `Coverage: ${riL.npl_coverage.toFixed(1)}%`,
+            label: 'NPL Ratio', color: nplRatio <= 6 ? 'text-gt-green' : 'text-gt-red',
+            value: fmtPct(nplRatio),
+            sub: `Coverage: ${fmtPct(nplCoverage)}`,
           },
         ].map((k) => (
-          <div key={k.label} className="bg-gt-card border border-gt-border rounded-2xl shadow-lg p-4">
+          <div key={k.label} className="bg-gt-card border border-gt-border rounded-2xl shadow-sm p-4">
             <p className="text-xs font-medium text-gt-muted uppercase tracking-wide">{k.label}</p>
             <p className={`text-2xl font-bold mt-1 ${k.color}`}>{k.value}</p>
             <p className="text-xs text-gt-muted mt-1">{k.sub}</p>

@@ -53,17 +53,17 @@ const Sidebar: React.FC = () => {
 
   return (
     <aside
-      className={`${collapsed ? 'w-14' : 'w-60'} bg-black flex flex-col transition-all duration-300 ease-in-out flex-shrink-0 border-r border-gt-border`}
+      className={`${collapsed ? 'w-14' : 'w-60'} bg-[#923403] flex flex-col transition-all duration-300 ease-in-out flex-shrink-0 border-r border-[#7a2c02]`}
     >
       {/* Logo */}
-      <div className={`p-4 border-b border-gt-border flex items-center gap-3 ${collapsed ? 'justify-center' : ''}`}>
-        <div className="w-9 h-9 bg-gt-orange rounded-lg flex items-center justify-center text-white font-black text-lg flex-shrink-0">
-          GT
+      <div className={`p-4 border-b border-[#7a2c02] flex items-center gap-3 ${collapsed ? 'justify-center' : ''}`}>
+        <div className="w-9 h-9 bg-white rounded-lg flex items-center justify-center flex-shrink-0">
+          <span className="text-gt-orange font-black text-sm leading-none">GT</span>
         </div>
         {!collapsed && (
           <div className="min-w-0">
-            <p className="text-gt-orange text-xs font-bold uppercase tracking-widest leading-tight">GTBank</p>
-            <p className="text-gt-muted text-xs truncate">CFO Intelligence</p>
+            <p className="text-white text-xs font-bold uppercase tracking-widest leading-tight">GTBank</p>
+            <p className="text-orange-200 text-xs truncate">CFO Intelligence</p>
           </div>
         )}
       </div>
@@ -73,7 +73,7 @@ const Sidebar: React.FC = () => {
         {navGroups.map((group) => (
           <div key={group.label} className="mb-2">
             {!collapsed && (
-              <p className="text-xs font-semibold text-gt-border uppercase tracking-widest px-4 py-2">
+              <p className="text-xs font-semibold text-orange-200 uppercase tracking-widest px-4 py-2">
                 {group.label}
               </p>
             )}
@@ -88,11 +88,11 @@ const Sidebar: React.FC = () => {
                       title={collapsed ? item.label : undefined}
                       className={`flex items-center gap-3 px-3 py-2 rounded-lg transition-all duration-150 group ${
                         isActive
-                          ? 'bg-gt-orange/15 text-gt-orange border-l-2 border-gt-orange'
-                          : 'text-gt-muted hover:bg-gt-card hover:text-white border-l-2 border-transparent'
+                          ? 'bg-white/20 text-gt-text font-semibold'
+                          : 'text-gt-text/80 hover:bg-white/10 hover:text-gt-text'
                       } ${collapsed ? 'justify-center' : ''}`}
                     >
-                      <Icon className={`w-4 h-4 flex-shrink-0 ${isActive ? 'text-gt-orange' : 'text-gt-muted group-hover:text-white'}`} />
+                      <Icon className={`w-4 h-4 flex-shrink-0 ${isActive ? 'text-gt-text' : 'text-gt-text/70 group-hover:text-gt-text'}`} />
                       {!collapsed && (
                         <span className="text-xs font-medium truncate">{item.label}</span>
                       )}
@@ -106,10 +106,10 @@ const Sidebar: React.FC = () => {
       </nav>
 
       {/* Collapse toggle */}
-      <div className="p-3 border-t border-gt-border">
+      <div className="p-3 border-t border-[#7a2c02]">
         <button
           onClick={() => setCollapsed(!collapsed)}
-          className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg text-gt-muted hover:bg-gt-card hover:text-white transition-colors ${collapsed ? 'justify-center' : ''}`}
+          className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg text-gt-text/80 hover:bg-white/10 hover:text-gt-text transition-colors ${collapsed ? 'justify-center' : ''}`}
         >
           {collapsed
             ? <ChevronRight className="w-4 h-4" />

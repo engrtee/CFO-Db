@@ -18,8 +18,8 @@ const Header: React.FC = () => {
   const handleSyncComplete = useCallback(async () => {
     setSyncOpen(false);
     try {
-      await sync();
-      showToast('✅ CaseWare sync complete. GL balances updated. Dashboard refreshed.');
+      const rows = await sync();
+      showToast(`✅ Sync complete. ${rows ?? 0} GL lines ingested. Dashboard updated.`);
     } catch {
       showToast('⚠️ Sync ran but API unavailable — using mock data.', 'info');
     }
@@ -28,10 +28,10 @@ const Header: React.FC = () => {
   const handleReset = async () => {
     try {
       await reset();
-      showToast('🔁 Dashboard reset to pre-journal state.');
+      showToast('↺ Dashboard reset to pre-journal state.');
     } catch {
       await refresh();
-      showToast('🔁 Reset complete (mock mode).', 'info');
+      showToast('↺ Reset complete (mock mode).', 'info');
     }
   };
 
@@ -45,8 +45,8 @@ const Header: React.FC = () => {
 
       {/* Toast */}
       {toast && (
-        <div className={`fixed bottom-6 right-6 z-40 px-5 py-3 rounded-xl shadow-xl text-sm font-medium border text-white transition-all animate-fade-in
-          ${toast.type === 'success' ? 'bg-gt-card border-gt-green text-white' : 'bg-gt-card border-gt-amber text-gt-amber'}`}
+        <div className={`fixed bottom-6 right-6 z-40 px-5 py-3 rounded-xl shadow-xl text-sm font-medium border transition-all animate-fade-in
+          ${toast.type === 'success' ? 'bg-white border-gt-green text-gt-text' : 'bg-white border-gt-amber text-gt-amber'}`}
         >
           {toast.msg}
         </div>
@@ -58,7 +58,7 @@ const Header: React.FC = () => {
           {/* Left: GTBank wordmark + entity info */}
           <div className="flex items-center gap-4 min-w-0">
             <div className="flex items-center gap-2">
-              <div className="w-9 h-9 bg-gt-orange rounded-lg flex items-center justify-center text-white font-black text-base flex-shrink-0 leading-none">
+              <div className="w-9 h-9 bg-gt-orange rounded-lg flex items-center justify-center text-gt-text font-black text-base flex-shrink-0 leading-none">
                 GT
               </div>
               <div className="min-w-0">
@@ -93,14 +93,14 @@ const Header: React.FC = () => {
           <div className="flex items-center gap-2 flex-wrap">
             {/* Last synced */}
             <span className="text-xs text-gt-muted hidden xl:block whitespace-nowrap">
-              Last synced from CaseWare: <span className="text-white font-medium">{syncedStr}</span>
+              Last synced: <span className="text-gt-text font-medium">{syncedStr}</span>
             </span>
 
             {/* Sync button */}
             <button
               onClick={handleSync}
               disabled={loading}
-              className="flex items-center gap-1.5 px-3 py-1.5 bg-gt-orange hover:bg-gt-orangeD text-white text-xs font-semibold rounded-lg transition-colors disabled:opacity-50 whitespace-nowrap"
+              className="flex items-center gap-1.5 px-3 py-1.5 bg-gt-orange hover:bg-gt-orangeD text-gt-text text-xs font-semibold rounded-lg transition-colors disabled:opacity-50 whitespace-nowrap"
             >
               <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} />
               Sync from CaseWare
@@ -110,27 +110,27 @@ const Header: React.FC = () => {
             <button
               onClick={handleReset}
               disabled={loading}
-              className="flex items-center gap-1.5 px-3 py-1.5 border border-gt-border text-gt-muted hover:text-white hover:border-white text-xs font-medium rounded-lg transition-colors disabled:opacity-40 whitespace-nowrap"
+              className="flex items-center gap-1.5 px-3 py-1.5 border border-gt-border text-gt-muted hover:text-gt-text hover:border-gt-text text-xs font-medium rounded-lg transition-colors disabled:opacity-40 whitespace-nowrap"
             >
               <RotateCcw className="w-3.5 h-3.5" />
               Reset Demo
             </button>
 
-            <button className="relative p-1.5 text-gt-muted hover:text-white hover:bg-gt-card2 rounded-lg transition-colors">
+            <button className="relative p-1.5 text-gt-muted hover:text-gt-text hover:bg-gt-card2 rounded-lg transition-colors">
               <Bell className="w-4 h-4" />
               <span className="absolute top-1 right-1 w-1.5 h-1.5 bg-gt-red rounded-full" />
             </button>
-            <button className="p-1.5 text-gt-muted hover:text-white hover:bg-gt-card2 rounded-lg transition-colors">
+            <button className="p-1.5 text-gt-muted hover:text-gt-text hover:bg-gt-card2 rounded-lg transition-colors">
               <Settings className="w-4 h-4" />
             </button>
 
             {/* User */}
             <div className="flex items-center gap-2 pl-2 border-l border-gt-border ml-1">
-              <div className="w-8 h-8 bg-gt-orange rounded-full flex items-center justify-center text-white text-xs font-bold">
+              <div className="w-8 h-8 bg-gt-orange rounded-full flex items-center justify-center text-gt-text text-xs font-bold">
                 AO
               </div>
               <div className="hidden sm:block">
-                <p className="text-xs font-semibold text-white leading-tight">Adaeze Okonkwo</p>
+                <p className="text-xs font-semibold text-gt-text leading-tight">Adaeze Okonkwo</p>
                 <p className="text-xs text-gt-muted leading-tight">Group CFO</p>
               </div>
             </div>

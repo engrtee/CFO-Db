@@ -18,7 +18,7 @@ const DkTooltip = ({ active, payload, label }: any) => {
   if (!active || !payload?.length) return null;
   return (
     <div className="bg-gt-card2 border border-gt-border rounded-xl shadow-lg p-3 text-xs">
-      <p className="font-semibold text-white mb-2">{label}</p>
+      <p className="font-semibold text-gt-text mb-2">{label}</p>
       {payload.map((p: any) => (
         <p key={p.name} style={{ color: p.color ?? p.fill }} className="flex justify-between gap-4">
           <span>{p.name}</span>
@@ -35,7 +35,7 @@ const CustTooltip = ({ active, payload, label }: any) => {
   if (!active || !payload?.length) return null;
   return (
     <div className="bg-gt-card2 border border-gt-border rounded-xl shadow-lg p-3 text-xs">
-      <p className="font-semibold text-white mb-1">{label}</p>
+      <p className="font-semibold text-gt-text mb-1">{label}</p>
       {payload.map((p: any) => (
         <p key={p.name} style={{ color: p.color }} className="flex justify-between gap-4">
           <span>{p.name}</span>
@@ -69,7 +69,7 @@ const SegmentInsights: React.FC = () => {
   const segmentBadges = [
     { label: 'Retail',    value: bn(latest.retail_revenue),    color: 'text-gt-orange bg-gt-orange/15' },
     { label: 'SME',       value: bn(latest.sme_revenue),       color: 'text-gt-green  bg-gt-green/15'  },
-    { label: 'Corporate', value: bn(latest.corporate_revenue), color: 'text-white bg-gt-card2'         },
+    { label: 'Corporate', value: bn(latest.corporate_revenue), color: 'text-gt-text bg-gt-card2'         },
     { label: 'Treasury',  value: bn(latest.treasury_revenue),  color: 'text-gt-amber bg-gt-amber/15'   },
   ];
 
@@ -92,7 +92,7 @@ const SegmentInsights: React.FC = () => {
         ].map((m) => (
           <div key={m.label} className="rounded-xl border border-gt-border bg-gt-card2 p-4">
             <p className="text-xs font-medium text-gt-muted uppercase tracking-wide">{m.label}</p>
-            <p className="text-xl font-bold text-white mt-1">{m.value}</p>
+            <p className="text-xl font-bold text-gt-text mt-1">{m.value}</p>
             <p className="text-xs text-gt-muted mt-1">{m.sub}</p>
           </div>
         ))}

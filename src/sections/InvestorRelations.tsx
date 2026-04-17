@@ -15,7 +15,7 @@ const DK_TOOLTIP = ({ active, payload, label }: any) => {
   if (!active || !payload?.length) return null;
   return (
     <div className="bg-gt-card2 border border-gt-border rounded-xl shadow-lg p-3 text-xs">
-      <p className="font-semibold text-white mb-1">{label}</p>
+      <p className="font-semibold text-gt-text mb-1">{label}</p>
       {payload.map((p: any) => (
         <p key={p.name} style={{ color: p.color }}>
           {p.name}: <span className="font-mono font-medium">{p.value?.toFixed(2)}</span>
@@ -42,8 +42,8 @@ const InvestorRelations: React.FC = () => {
 
   const annualPAT     = fp.reduce((s, r) => s + r.pat, 0);
   const latestBs      = bs[bs.length - 1];
-  const eps           = annualPAT / SHARES_BN;
-  const bookValue     = latestBs.equity / SHARES_BN;
+  const eps           = annualPAT / (SHARES_BN * 1e9);       // PAT raw naira ÷ 29.43bn shares
+  const bookValue     = latestBs.equity / (SHARES_BN * 1e9); // Equity raw naira ÷ shares
   const peRatio       = SHARE_PRICE / eps;
   const roe           = fp[fp.length - 1].roe;
   const dividendPS    = eps * 0.35;
@@ -53,18 +53,18 @@ const InvestorRelations: React.FC = () => {
   const kpis = [
     { label: 'Earnings Per Share',   value: `₦${eps.toFixed(2)}`,        sub: `PAT ÷ ${SHARES_BN}bn shares`,  icon: TrendingUp,  color: 'text-gt-orange' },
     { label: 'Book Value / Share',   value: `₦${bookValue.toFixed(2)}`,   sub: `Equity ÷ shares outstanding`,  icon: DollarSign,  color: 'text-gt-green'  },
-    { label: 'Price / Earnings',     value: `${peRatio.toFixed(1)}×`,      sub: `Share price ₦${SHARE_PRICE}`,  icon: PieChart,    color: 'text-white'     },
+    { label: 'Price / Earnings',     value: `${peRatio.toFixed(1)}×`,      sub: `Share price ₦${SHARE_PRICE}`,  icon: PieChart,    color: 'text-gt-text'     },
     { label: 'Return on Equity',     value: `${roe.toFixed(1)}%`,          sub: 'Dec 2024 annualised',          icon: Award,       color: 'text-gt-orange' },
     { label: 'Dividend Yield',       value: `${dividendYield.toFixed(1)}%`, sub: `DPS: ₦${dividendPS.toFixed(2)}`, icon: DollarSign, color: 'text-gt-green' },
-    { label: 'Market Capitalisation',value: `₦${marketCap.toFixed(0)}bn`, sub: `@ ₦${SHARE_PRICE}/share`,      icon: TrendingUp,  color: 'text-white'     },
+    { label: 'Market Capitalisation',value: `₦${marketCap.toFixed(0)}bn`, sub: `@ ₦${SHARE_PRICE}/share`,      icon: TrendingUp,  color: 'text-gt-text'     },
   ];
 
   // Quarterly EPS derived from PAT
   const quarterlyEPS = [
-    { q: 'Q1 2024', eps: (fp.slice(0, 3).reduce((s, r) => s + r.pat, 0) / SHARES_BN) },
-    { q: 'Q2 2024', eps: (fp.slice(3, 6).reduce((s, r) => s + r.pat, 0) / SHARES_BN) },
-    { q: 'Q3 2024', eps: (fp.slice(6, 9).reduce((s, r) => s + r.pat, 0) / SHARES_BN) },
-    { q: 'Q4 2024', eps: (fp.slice(9, 12).reduce((s, r) => s + r.pat, 0) / SHARES_BN) },
+    { q: 'Q1 2024', eps: fp.slice(0, 3).reduce((s, r) => s + r.pat, 0) / (SHARES_BN * 1e9) },
+    { q: 'Q2 2024', eps: fp.slice(3, 6).reduce((s, r) => s + r.pat, 0) / (SHARES_BN * 1e9) },
+    { q: 'Q3 2024', eps: fp.slice(6, 9).reduce((s, r) => s + r.pat, 0) / (SHARES_BN * 1e9) },
+    { q: 'Q4 2024', eps: fp.slice(9, 12).reduce((s, r) => s + r.pat, 0) / (SHARES_BN * 1e9) },
   ];
 
   const ratios = [
@@ -73,7 +73,7 @@ const InvestorRelations: React.FC = () => {
     { label: 'Return on Assets',     value: `${fp[fp.length - 1].roa.toFixed(2)}%`,  benchmark: '2.5%', above: fp[fp.length - 1].roa >= 2.5 },
     { label: 'Cost-to-Income Ratio', value: `${data.cost_metrics[data.cost_metrics.length - 1].cost_to_income_ratio.toFixed(1)}%`, benchmark: '50.0%', above: data.cost_metrics[data.cost_metrics.length - 1].cost_to_income_ratio <= 50.0 },
     { label: 'NPL Ratio',            value: `${data.risk_indicators[data.risk_indicators.length - 1].npl_ratio.toFixed(1)}%`, benchmark: '5.0%', above: data.risk_indicators[data.risk_indicators.length - 1].npl_ratio <= 5.0 },
-    { label: 'Earnings Per Share',   value: `₦${eps.toFixed(2)}`,                    benchmark: '₦15.00', above: eps >= 15.0 },
+    { label: 'Earnings Per Share',   value: `₦${eps.toFixed(2)}`,                    benchmark: '₦2.50', above: eps >= 2.50 },
   ];
 
   const tableRows = kpis.map(k => ({ metric: k.label, value: k.value, note: k.sub })) as unknown as Record<string, unknown>[];
@@ -134,11 +134,11 @@ const InvestorRelations: React.FC = () => {
               {ratios.map((r) => (
                 <div key={r.label} className="flex items-center justify-between px-3 py-2 bg-gt-card2 rounded-lg border border-gt-border">
                   <div>
-                    <p className="text-xs font-medium text-white">{r.label}</p>
+                    <p className="text-xs font-medium text-gt-text">{r.label}</p>
                     <p className="text-xs text-gt-muted">Benchmark: {r.benchmark}</p>
                   </div>
                   <div className="text-right">
-                    <p className="text-sm font-bold text-white">{r.value}</p>
+                    <p className="text-sm font-bold text-gt-text">{r.value}</p>
                     <span className={`text-xs font-semibold ${r.above ? 'text-gt-green' : 'text-gt-red'}`}>
                       {r.above ? '✓ Meets' : '✗ Below'}
                     </span>
@@ -177,7 +177,7 @@ const InvestorRelations: React.FC = () => {
             </p>
             <button
               onClick={() => window.print()}
-              className="flex items-center gap-1.5 px-3 py-1.5 bg-gt-orange hover:bg-gt-orangeD text-white text-xs font-semibold rounded-lg transition-colors"
+              className="flex items-center gap-1.5 px-3 py-1.5 bg-gt-orange hover:bg-gt-orangeD text-gt-text text-xs font-semibold rounded-lg transition-colors"
             >
               <Download className="w-3.5 h-3.5" />
               Export Board Pack
@@ -194,7 +194,7 @@ const InvestorRelations: React.FC = () => {
                     <FileText className="w-4 h-4 text-gt-orange" />
                   </div>
                   <div>
-                    <p className="text-sm font-medium text-white">{r.title}</p>
+                    <p className="text-sm font-medium text-gt-text">{r.title}</p>
                     <p className="text-xs text-gt-muted">{r.date} · {r.type} · {r.size}</p>
                   </div>
                 </div>

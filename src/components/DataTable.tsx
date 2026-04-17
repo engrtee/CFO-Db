@@ -53,7 +53,7 @@ export function DataTable<T extends Record<string, unknown>>({ rows, columns }: 
             {pageRows.map((row, i) => (
               <tr key={i} className="hover:bg-gt-orange/5 transition-colors">
                 {cols.map((col) => (
-                  <td key={col} className="px-4 py-2.5 text-white whitespace-nowrap font-mono text-xs">
+                  <td key={col} className="px-4 py-2.5 text-gt-text whitespace-nowrap font-mono text-xs">
                     {formatCell(row[col])}
                   </td>
                 ))}

@@ -8,7 +8,7 @@ import { useDb } from '../lib/DbContext';
 import { SectionCard } from '../components/SectionCard';
 import { DataTable } from '../components/DataTable';
 
-const bn  = (n: number) => '₦' + n.toLocaleString('en-NG', { minimumFractionDigits: 1, maximumFractionDigits: 1 }) + 'bn';
+const bn  = (n: number) => '₦' + (n / 1e9).toFixed(1) + 'bn';
 const pct = (n: number) => n.toFixed(1) + '%';
 
 function trendIcon(cur: number, prev: number, goodUp = true) {
@@ -40,7 +40,7 @@ function KpiTile({ label, value, prev, cur, goodUp = true }: KpiTileProps) {
   return (
     <div className="rounded-xl border border-gt-border bg-gt-card2 p-4 flex flex-col gap-1.5">
       <span className="text-xs font-medium text-gt-muted uppercase tracking-wide">{label}</span>
-      <span className="text-xl font-bold text-white">{value}</span>
+      <span className="text-xl font-bold text-gt-text">{value}</span>
       <div className="flex items-center gap-1">
         {trendIcon(cur, prev, goodUp)}
         {pctChange(cur, prev, goodUp)}
@@ -54,11 +54,11 @@ const DkTooltip = ({ active, payload, label }: any) => {
   if (!active || !payload?.length) return null;
   return (
     <div className="bg-gt-card2 border border-gt-border rounded-xl shadow-lg p-3 text-xs">
-      <p className="font-semibold text-white mb-2">{label}</p>
+      <p className="font-semibold text-gt-text mb-2">{label}</p>
       {payload.map((p: any) => (
         <p key={p.name} style={{ color: p.color }} className="flex justify-between gap-4">
           <span>{p.name}</span>
-          <span className="font-mono font-medium">₦{p.value?.toFixed(1)}bn</span>
+          <span className="font-mono font-medium">₦{(p.value / 1e9)?.toFixed(1)}bn</span>
         </p>
       ))}
     </div>
@@ -112,8 +112,8 @@ const FinancialPerformance: React.FC = () => {
             <YAxis
               tick={{ fontSize: 10, fill: '#AAA' }}
               axisLine={false} tickLine={false}
-              tickFormatter={(v) => `₦${v}`}
-              width={48}
+              tickFormatter={(v) => `₦${(v / 1e9).toFixed(0)}bn`}
+              width={60}
             />
             <Tooltip content={<DkTooltip />} />
             <Legend iconType="circle" iconSize={8} wrapperStyle={{ fontSize: 11, paddingTop: 8 }} />

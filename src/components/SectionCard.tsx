@@ -30,7 +30,7 @@ export const SectionCard: React.FC<SectionCardProps> = ({
             {icon}
           </div>
           <div className="min-w-0">
-            <h2 className="text-sm font-bold text-white uppercase tracking-wide truncate">{title}</h2>
+            <h2 className="text-sm font-bold text-gt-text uppercase tracking-wide truncate">{title}</h2>
             {subtitle && (
               <p className="text-xs text-gt-muted mt-0.5 truncate">{subtitle}</p>
             )}
@@ -55,7 +55,7 @@ export const SectionCard: React.FC<SectionCardProps> = ({
               onClick={() => setShowTable((t) => !t)}
               className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium transition-colors border ${
                 showTable
-                  ? 'bg-gt-orange text-white border-gt-orange'
+                  ? 'bg-gt-orange text-gt-text border-gt-orange'
                   : 'text-gt-muted border-gt-border hover:border-gt-orange hover:text-gt-orange'
               }`}
             >

@@ -60,7 +60,7 @@ const KPICard: React.FC<KPICardProps> = ({
     >
       {/* Tooltip */}
       {tooltip && showTooltip && (
-        <div className="absolute z-50 top-full mt-2 left-0 w-56 bg-gray-900 text-white rounded-xl p-3 shadow-xl text-xs">
+        <div className="absolute z-50 top-full mt-2 left-0 w-56 bg-gray-900 text-gt-text rounded-xl p-3 shadow-xl text-xs">
           <div className="font-semibold text-gray-300 mb-2 uppercase tracking-wide">Comparison</div>
           {tooltip.mtd && (
             <div className="flex justify-between mb-1">

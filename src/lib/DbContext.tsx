@@ -5,7 +5,7 @@
  * work without modification.
  */
 import React, { createContext, useContext, useState, useCallback, useEffect, ReactNode } from 'react';
-import { getDashboard, syncDB, resetDB } from './api';
+import { getDashboard, syncCaseware, resetDB } from './api';
 import {
   financial_performance as mockFP, balance_sheet as mockBS,
   risk_indicators as mockRI, liquidity_metrics as mockLM,
@@ -35,7 +35,7 @@ export interface DbContextValue {
   usingMock:    boolean;        // true when API unavailable
   kpis:         Record<string, number>;
   refresh:      () => Promise<void>;
-  sync:         () => Promise<void>;
+  sync:         () => Promise<number | undefined>;
   reset:        () => Promise<void>;
 }
 
@@ -94,9 +94,10 @@ export const DbProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const sync = useCallback(async () => {
     setLoading(true);
     try {
-      await syncDB();
+      const res = await syncCaseware();
       const payload = await getDashboard();
       applyApiData(payload);
+      return res.rowsIngested;
     } finally {
       setLoading(false);
     }

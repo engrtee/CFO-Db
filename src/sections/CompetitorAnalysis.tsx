@@ -33,7 +33,7 @@ const DK = ({ active, payload, label }: any) => {
   if (!active || !payload?.length) return null;
   return (
     <div className="bg-gt-card2 border border-gt-border rounded-xl shadow p-3 text-xs">
-      <p className="font-semibold text-white mb-1">{label}</p>
+      <p className="font-semibold text-gt-text mb-1">{label}</p>
       {payload.map((p: any) => (
         <p key={p.name} style={{ color: p.color }}>
           {p.name}: <span className="font-mono">{typeof p.value === 'number' ? p.value.toFixed(1) : p.value}</span>
@@ -116,7 +116,7 @@ const CompetitorAnalysis: React.FC = () => {
             return (
               <div key={m.key} className="bg-gt-card2 border border-gt-border rounded-xl p-3">
                 <p className="text-xs text-gt-muted uppercase tracking-wide mb-1">{m.label}</p>
-                <p className="text-xl font-bold text-white">{val.toFixed(1)}</p>
+                <p className="text-xl font-bold text-gt-text">{val.toFixed(1)}</p>
                 <p className={`text-xs font-semibold mt-0.5 ${good ? 'text-gt-green' : 'text-gt-red'}`}>
                   {diff >= 0 ? '+' : ''}{diff.toFixed(1)} vs peers
                 </p>
@@ -135,7 +135,7 @@ const CompetitorAnalysis: React.FC = () => {
               <select
                 value={selectedMetric}
                 onChange={e => setSelectedMetric(e.target.value)}
-                className="bg-gt-card2 border border-gt-border text-white text-xs rounded-lg px-2 py-1.5"
+                className="bg-gt-card2 border border-gt-border text-gt-text text-xs rounded-lg px-2 py-1.5"
               >
                 {METRICS.map(m => <option key={m.key} value={m.key}>{m.label}</option>)}
               </select>
@@ -227,15 +227,15 @@ const CompetitorAnalysis: React.FC = () => {
                 {[...PEERS].sort((a, b) => b.pat - a.pat).map((b, i) => (
                   <tr key={b.name} className={`transition-colors ${b.name === 'GTBank' ? 'bg-gt-orange/5' : 'hover:bg-gt-card2'}`}>
                     <td className="px-3 py-2.5 text-gt-muted font-mono">{i + 1}</td>
-                    <td className="px-3 py-2.5 font-semibold text-white">{b.name}{b.name === 'GTBank' && <span className="ml-1.5 text-gt-orange text-xs">(us)</span>}</td>
-                    <td className="px-3 py-2.5 font-mono text-white">{b.pat}</td>
-                    <td className="px-3 py-2.5 font-mono text-white">{b.roe}</td>
-                    <td className="px-3 py-2.5 font-mono text-white">{b.roa}</td>
-                    <td className="px-3 py-2.5 font-mono text-white">{b.cir}</td>
-                    <td className="px-3 py-2.5 font-mono text-white">{b.nim}</td>
-                    <td className="px-3 py-2.5 font-mono text-white">{b.npl}</td>
-                    <td className="px-3 py-2.5 font-mono text-white">{b.lcr}</td>
-                    <td className="px-3 py-2.5 font-mono text-white">{b.cap}</td>
+                    <td className="px-3 py-2.5 font-semibold text-gt-text">{b.name}{b.name === 'GTBank' && <span className="ml-1.5 text-gt-orange text-xs">(us)</span>}</td>
+                    <td className="px-3 py-2.5 font-mono text-gt-text">{b.pat}</td>
+                    <td className="px-3 py-2.5 font-mono text-gt-text">{b.roe}</td>
+                    <td className="px-3 py-2.5 font-mono text-gt-text">{b.roa}</td>
+                    <td className="px-3 py-2.5 font-mono text-gt-text">{b.cir}</td>
+                    <td className="px-3 py-2.5 font-mono text-gt-text">{b.nim}</td>
+                    <td className="px-3 py-2.5 font-mono text-gt-text">{b.npl}</td>
+                    <td className="px-3 py-2.5 font-mono text-gt-text">{b.lcr}</td>
+                    <td className="px-3 py-2.5 font-mono text-gt-text">{b.cap}</td>
                   </tr>
                 ))}
               </tbody>

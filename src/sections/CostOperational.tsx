@@ -20,7 +20,7 @@ const PieTooltip = ({ active, payload }: any) => {
   return (
     <div className="bg-gt-card2 border border-gt-border rounded-xl shadow-lg p-3 text-xs">
       <p style={{ color: d.payload.fill }} className="font-semibold">{d.name}</p>
-      <p className="text-white mt-0.5">₦{d.value?.toFixed(1)}bn</p>
+      <p className="text-gt-text mt-0.5">₦{d.value?.toFixed(1)}bn</p>
       <p className="text-gt-muted">{((d.value / d.payload.total) * 100).toFixed(1)}% of OpEx</p>
     </div>
   );
@@ -30,7 +30,7 @@ const LineTooltip = ({ active, payload, label }: any) => {
   if (!active || !payload?.length) return null;
   return (
     <div className="bg-gt-card2 border border-gt-border rounded-xl shadow-lg p-3 text-xs">
-      <p className="font-semibold text-white mb-1">{label}</p>
+      <p className="font-semibold text-gt-text mb-1">{label}</p>
       {payload.map((p: any) => (
         <p key={p.name} style={{ color: p.color }} className="flex justify-between gap-4">
           <span>{p.name}</span>
@@ -81,7 +81,7 @@ const CostOperational: React.FC = () => {
         ].map((m) => (
           <div key={m.label} className={`rounded-xl border p-4 ${m.good ? 'border-gt-border bg-gt-card2' : 'border-gt-amber/30 bg-gt-amber/5'}`}>
             <p className="text-xs font-medium text-gt-muted uppercase tracking-wide">{m.label}</p>
-            <p className="text-xl font-bold text-white mt-1">{m.value}</p>
+            <p className="text-xl font-bold text-gt-text mt-1">{m.value}</p>
             <p className={`text-xs mt-1 ${m.good ? 'text-gt-muted' : 'text-gt-amber font-medium'}`}>{m.sub}</p>
           </div>
         ))}

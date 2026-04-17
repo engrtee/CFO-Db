@@ -2,9 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { CheckCircle, Loader2 } from 'lucide-react';
 
 const STEPS = [
-  { icon: '🔌', label: 'Connecting to CaseWare…',          ms: 1200 },
-  { icon: '📤', label: 'Exporting Trial Balance…',          ms: 1200 },
-  { icon: '💾', label: 'Ingesting data into FinancialDB…',  ms: 1200 },
+  { icon: '🔌', label: 'Connecting to CaseWare export folder...', ms: 1000 },
+  { icon: '📤', label: 'Reading trial balance file...', ms: 1000 },
+  { icon: '💾', label: 'Updating FinancialDB...', ms: 1000 },
 ];
 
 interface SyncModalProps {
@@ -48,12 +48,12 @@ const SyncModal: React.FC<SyncModalProps> = ({ open, onComplete }) => {
       <div className="relative bg-gt-card border border-gt-border rounded-2xl shadow-2xl p-8 w-full max-w-md mx-4">
         {/* GTBank header */}
         <div className="flex items-center gap-3 mb-6">
-          <div className="w-10 h-10 rounded-xl bg-gt-orange flex items-center justify-center text-white font-black text-lg">
+          <div className="w-10 h-10 rounded-xl bg-gt-orange flex items-center justify-center text-gt-text font-black text-lg">
             GT
           </div>
           <div>
             <p className="text-xs text-gt-muted uppercase tracking-widest">Guaranty Trust Bank</p>
-            <p className="text-sm font-bold text-white">CaseWare Sync in Progress</p>
+            <p className="text-sm font-bold text-gt-text">CaseWare Sync in Progress</p>
           </div>
         </div>
 

@@ -1,9 +1,10 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import {
   Upload, RefreshCw, Database, CheckCircle, XCircle,
   Clock, FileText, Server, AlertTriangle,
 } from 'lucide-react';
 import { useDb } from '../lib/DbContext';
+import { getIngestionLog } from '../lib/api';
 
 interface LogEntry {
   id: number;
@@ -14,14 +15,6 @@ interface LogEntry {
   duration_ms: number;
   message: string;
 }
-
-const MOCK_LOG: LogEntry[] = [
-  { id: 5, timestamp: '2025-01-15 09:42:18', filename: 'test.xlsx',          status: 'success', rows_ingested: 312, duration_ms: 2840, message: 'All tables loaded. State: before.' },
-  { id: 4, timestamp: '2025-01-14 17:05:33', filename: 'trial_balance.xlsx', status: 'error',   rows_ingested: 0,   duration_ms: 420,  message: 'Sheet "GL Data" not found in workbook.' },
-  { id: 3, timestamp: '2025-01-13 11:20:11', filename: 'test.xlsx',          status: 'success', rows_ingested: 308, duration_ms: 2650, message: 'All tables loaded. State: before.' },
-  { id: 2, timestamp: '2025-01-10 08:55:02', filename: 'q4_gtbank.xlsx',     status: 'success', rows_ingested: 318, duration_ms: 3120, message: 'All tables loaded. State: before.' },
-  { id: 1, timestamp: '2025-01-08 14:30:45', filename: 'initial.xlsx',       status: 'success', rows_ingested: 295, duration_ms: 2580, message: 'Initial database population complete.' },
-];
 
 const StatusBadge: React.FC<{ status: LogEntry['status'] }> = ({ status }) => {
   if (status === 'success') return (
@@ -43,12 +36,41 @@ const StatusBadge: React.FC<{ status: LogEntry['status'] }> = ({ status }) => {
 
 const AdminPage: React.FC = () => {
   const { loading, lastSynced, usingMock, refresh, sync, reset } = useDb();
-  const [log,       setLog]       = useState<LogEntry[]>(MOCK_LOG);
+  const [log,       setLog]       = useState<LogEntry[]>([]);
+  const [logLoading,setLogLoading]= useState(false);
   const [uploading, setUploading] = useState(false);
   const [toast,     setToast]     = useState<string | null>(null);
   const fileRef                   = useRef<HTMLInputElement>(null);
 
   const showToast = (msg: string) => { setToast(msg); setTimeout(() => setToast(null), 4000); };
+
+  const fetchLog = useCallback(async () => {
+    setLogLoading(true);
+    try {
+      const raw = await getIngestionLog();
+      // Normalise API rows to match LogEntry shape
+      const entries: LogEntry[] = raw.map((r: any, i: number) => ({
+        id:            r.id ?? i + 1,
+        timestamp:     r.uploaded_at
+          ? new Date(r.uploaded_at).toLocaleString('en-NG')
+          : new Date().toLocaleString('en-NG'),
+        filename:      r.filename ?? '—',
+        status:        (r.status === 'success' ? 'success' : r.status === 'error' ? 'error' : 'running') as LogEntry['status'],
+        rows_ingested: r.rows_ingested ?? 0,
+        duration_ms:   0,
+        message:       r.message ?? r.state_loaded ?? '',
+      }));
+      setLog(entries);
+    } catch {
+      // API offline — leave log empty rather than showing stale mock
+      setLog([]);
+    } finally {
+      setLogLoading(false);
+    }
+  }, []);
+
+  // Load log on mount
+  useEffect(() => { fetchLog(); }, [fetchLog]);
 
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -56,7 +78,7 @@ const AdminPage: React.FC = () => {
     setUploading(true);
 
     const runningEntry: LogEntry = {
-      id: log.length + 1,
+      id: Date.now(),
       timestamp: new Date().toLocaleString('en-NG'),
       filename: file.name,
       status: 'running',
@@ -69,53 +91,23 @@ const AdminPage: React.FC = () => {
     try {
       const form = new FormData();
       form.append('file', file);
-      const start = Date.now();
       const res = await fetch('/api/upload', { method: 'POST', body: form });
-      const dur = Date.now() - start;
 
       if (res.ok) {
         const data = await res.json();
-        const entry: LogEntry = {
-          id: runningEntry.id,
-          timestamp: new Date().toLocaleString('en-NG'),
-          filename: file.name,
-          status: 'success',
-          rows_ingested: data.rows_ingested ?? 0,
-          duration_ms: dur,
-          message: data.message ?? 'Upload complete.',
-        };
-        setLog(prev => [entry, ...prev.slice(1)]);
         await refresh();
-        showToast(`✅ ${file.name} ingested — ${entry.rows_ingested} rows loaded.`);
+        showToast(`✅ ${file.name} ingested — ${data.rows_ingested ?? 0} rows loaded.`);
       } else {
         const err = await res.json().catch(() => ({ message: 'Unknown error' }));
-        const entry: LogEntry = {
-          id: runningEntry.id,
-          timestamp: new Date().toLocaleString('en-NG'),
-          filename: file.name,
-          status: 'error',
-          rows_ingested: 0,
-          duration_ms: dur,
-          message: err.message ?? 'Upload failed.',
-        };
-        setLog(prev => [entry, ...prev.slice(1)]);
         showToast(`⚠️ Upload failed: ${err.message}`);
       }
     } catch {
-      const entry: LogEntry = {
-        id: runningEntry.id,
-        timestamp: new Date().toLocaleString('en-NG'),
-        filename: file.name,
-        status: 'error',
-        rows_ingested: 0,
-        duration_ms: 0,
-        message: 'API server unavailable — running in demo mode.',
-      };
-      setLog(prev => [entry, ...prev.slice(1)]);
       showToast('⚠️ API unavailable. Dashboard is in demo mode.');
     } finally {
       setUploading(false);
       if (fileRef.current) fileRef.current.value = '';
+      // Refresh log from API after upload attempt
+      await fetchLog();
     }
   };
 
@@ -127,7 +119,7 @@ const AdminPage: React.FC = () => {
     <div className="space-y-6">
       {/* Toast */}
       {toast && (
-        <div className="fixed bottom-6 right-6 z-40 px-5 py-3 rounded-xl shadow-xl text-sm font-medium border text-white bg-gt-card border-gt-green animate-fade-in">
+        <div className="fixed bottom-6 right-6 z-40 px-5 py-3 rounded-xl shadow-xl text-sm font-medium border text-gt-text bg-gt-card border-gt-green animate-fade-in">
           {toast}
         </div>
       )}
@@ -135,7 +127,7 @@ const AdminPage: React.FC = () => {
       {/* Page header */}
       <div className="flex items-start justify-between flex-wrap gap-3">
         <div>
-          <h1 className="text-lg font-bold text-white uppercase tracking-wide">Admin / Data Ingestion</h1>
+          <h1 className="text-lg font-bold text-gt-text uppercase tracking-wide">Admin / Data Ingestion</h1>
           <p className="text-xs text-gt-muted mt-0.5">Manage GL data ingestion and database state</p>
         </div>
         <div className="flex items-center gap-1.5 px-3 py-2 bg-gt-card border border-gt-border rounded-xl">
@@ -166,7 +158,7 @@ const AdminPage: React.FC = () => {
             <Database className="w-4 h-4 text-gt-muted" />
             <p className="text-xs font-semibold text-gt-muted uppercase tracking-wide">Database</p>
           </div>
-          <p className="text-lg font-bold text-white">FinancialDB</p>
+          <p className="text-lg font-bold text-gt-text">FinancialDB</p>
           <p className="text-xs text-gt-muted mt-1">postgresql://localhost:5432</p>
         </div>
 
@@ -175,14 +167,14 @@ const AdminPage: React.FC = () => {
             <Clock className="w-4 h-4 text-gt-muted" />
             <p className="text-xs font-semibold text-gt-muted uppercase tracking-wide">Last Sync</p>
           </div>
-          <p className="text-lg font-bold text-white">{syncedStr}</p>
+          <p className="text-lg font-bold text-gt-text">{syncedStr}</p>
           <p className="text-xs text-gt-muted mt-1">Today</p>
         </div>
       </div>
 
       {/* Upload section */}
       <div className="bg-gt-card border border-gt-border rounded-2xl p-6">
-        <h2 className="text-sm font-bold text-white uppercase tracking-wide mb-1">Manual Data Upload</h2>
+        <h2 className="text-sm font-bold text-gt-text uppercase tracking-wide mb-1">Manual Data Upload</h2>
         <p className="text-xs text-gt-muted mb-4">
           Upload a CaseWare Excel export (.xlsx) to re-ingest the GL. Requires the API server and Python
           <code className="ml-1 px-1.5 py-0.5 bg-gt-card2 text-gt-orange rounded text-xs font-mono">ingest_data.py</code>
@@ -194,7 +186,7 @@ const AdminPage: React.FC = () => {
           onClick={() => fileRef.current?.click()}
         >
           <Upload className="w-8 h-8 text-gt-muted group-hover:text-gt-orange mx-auto mb-3 transition-colors" />
-          <p className="text-sm font-medium text-white mb-1">Click to select or drag & drop</p>
+          <p className="text-sm font-medium text-gt-text mb-1">Click to select or drag & drop</p>
           <p className="text-xs text-gt-muted">Accepts .xlsx files exported from CaseWare</p>
         </div>
 
@@ -226,12 +218,12 @@ const AdminPage: React.FC = () => {
 
       {/* Quick actions */}
       <div className="bg-gt-card border border-gt-border rounded-2xl p-6">
-        <h2 className="text-sm font-bold text-white uppercase tracking-wide mb-4">Quick Actions</h2>
+        <h2 className="text-sm font-bold text-gt-text uppercase tracking-wide mb-4">Quick Actions</h2>
         <div className="flex flex-wrap gap-3">
           <button
             onClick={async () => { await sync(); showToast('✅ Sync triggered — dashboard refreshed.'); }}
             disabled={loading}
-            className="flex items-center gap-1.5 px-4 py-2 bg-gt-orange hover:bg-gt-orangeD text-white text-xs font-semibold rounded-lg transition-colors disabled:opacity-50"
+            className="flex items-center gap-1.5 px-4 py-2 bg-gt-orange hover:bg-gt-orangeD text-gt-text text-xs font-semibold rounded-lg transition-colors disabled:opacity-50"
           >
             <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} />
             Trigger Sync
@@ -239,7 +231,7 @@ const AdminPage: React.FC = () => {
           <button
             onClick={async () => { await reset(); showToast('🔁 Dashboard reset to pre-journal state.'); }}
             disabled={loading}
-            className="flex items-center gap-1.5 px-4 py-2 border border-gt-border text-gt-muted hover:text-white hover:border-white text-xs font-medium rounded-lg transition-colors disabled:opacity-40"
+            className="flex items-center gap-1.5 px-4 py-2 border border-gt-border text-gt-muted hover:text-gt-text hover:border-white text-xs font-medium rounded-lg transition-colors disabled:opacity-40"
           >
             <Database className="w-3.5 h-3.5" />
             Reset to Before
@@ -247,7 +239,7 @@ const AdminPage: React.FC = () => {
           <button
             onClick={() => refresh().then(() => showToast('✅ Dashboard data refreshed.'))}
             disabled={loading}
-            className="flex items-center gap-1.5 px-4 py-2 border border-gt-border text-gt-muted hover:text-white hover:border-white text-xs font-medium rounded-lg transition-colors disabled:opacity-40"
+            className="flex items-center gap-1.5 px-4 py-2 border border-gt-border text-gt-muted hover:text-gt-text hover:border-white text-xs font-medium rounded-lg transition-colors disabled:opacity-40"
           >
             <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} />
             Refresh Dashboard
@@ -259,8 +251,16 @@ const AdminPage: React.FC = () => {
       <div className="bg-gt-card border border-gt-border rounded-2xl overflow-hidden">
         <div className="px-5 pt-4 pb-3 border-b border-gt-border flex items-center gap-2">
           <FileText className="w-4 h-4 text-gt-muted" />
-          <h2 className="text-sm font-bold text-white uppercase tracking-wide">Ingestion Log</h2>
+          <h2 className="text-sm font-bold text-gt-text uppercase tracking-wide">Ingestion Log</h2>
+          {logLoading && <RefreshCw className="w-3.5 h-3.5 text-gt-orange animate-spin ml-1" />}
           <span className="ml-auto text-xs text-gt-muted">{log.length} entries</span>
+          <button
+            onClick={fetchLog}
+            disabled={logLoading}
+            className="flex items-center gap-1 text-xs text-gt-muted hover:text-gt-text transition-colors disabled:opacity-40"
+          >
+            <RefreshCw className="w-3 h-3" /> Refresh
+          </button>
         </div>
         <div className="overflow-x-auto">
           <table className="w-full text-xs">
@@ -275,13 +275,13 @@ const AdminPage: React.FC = () => {
               {log.map(entry => (
                 <tr key={entry.id} className="hover:bg-gt-card2 transition-colors">
                   <td className="px-4 py-3 text-gt-muted font-mono">{entry.id}</td>
-                  <td className="px-4 py-3 text-white font-mono whitespace-nowrap">{entry.timestamp}</td>
-                  <td className="px-4 py-3 text-white whitespace-nowrap">{entry.filename}</td>
+                  <td className="px-4 py-3 text-gt-text font-mono whitespace-nowrap">{entry.timestamp}</td>
+                  <td className="px-4 py-3 text-gt-text whitespace-nowrap">{entry.filename}</td>
                   <td className="px-4 py-3"><StatusBadge status={entry.status} /></td>
-                  <td className="px-4 py-3 text-white font-mono">
+                  <td className="px-4 py-3 text-gt-text font-mono">
                     {entry.rows_ingested > 0 ? entry.rows_ingested.toLocaleString() : '—'}
                   </td>
-                  <td className="px-4 py-3 text-white font-mono">
+                  <td className="px-4 py-3 text-gt-text font-mono">
                     {entry.duration_ms > 0 ? `${(entry.duration_ms / 1000).toFixed(2)}s` : '—'}
                   </td>
                   <td className="px-4 py-3 text-gt-muted max-w-xs truncate">{entry.message}</td>
