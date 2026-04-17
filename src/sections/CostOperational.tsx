@@ -8,8 +8,8 @@ import { useDb } from '../lib/DbContext';
 import { SectionCard } from '../components/SectionCard';
 import { DataTable } from '../components/DataTable';
 
-const bn  = (n: number) => '₦' + n.toFixed(1) + 'bn';
-const mn  = (n: number) => '₦' + n.toFixed(0) + 'mn';
+const bn  = (n: number) => '₦' + (n / 1e9).toFixed(1) + 'bn';
+const mn  = (n: number) => '₦' + (n / 1e6).toFixed(0) + 'mn';
 const pct = (n: number) => n.toFixed(1) + '%';
 
 const COST_COLORS = ['#F58220', '#27AE60', '#AAAAAA', '#E02020'];
@@ -20,7 +20,7 @@ const PieTooltip = ({ active, payload }: any) => {
   return (
     <div className="bg-gt-card2 border border-gt-border rounded-xl shadow-lg p-3 text-xs">
       <p style={{ color: d.payload.fill }} className="font-semibold">{d.name}</p>
-      <p className="text-gt-text mt-0.5">₦{d.value?.toFixed(1)}bn</p>
+      <p className="text-gt-text mt-0.5">₦{(d.value / 1e9)?.toFixed(1)}bn</p>
       <p className="text-gt-muted">{((d.value / d.payload.total) * 100).toFixed(1)}% of OpEx</p>
     </div>
   );

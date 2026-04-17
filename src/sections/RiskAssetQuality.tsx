@@ -6,7 +6,7 @@ import { SectionCard } from '../components/SectionCard';
 import { DataTable } from '../components/DataTable';
 
 const pct = (n: number) => n.toFixed(1) + '%';
-const bn  = (n: number) => '₦' + n.toLocaleString('en-NG', { minimumFractionDigits: 1, maximumFractionDigits: 1 }) + 'bn';
+const bn  = (n: number) => '₦' + (n / 1e9).toFixed(1) + 'bn';
 
 function ragNpl(v: number)      { return v <= 5 ? 'green' : v <= 7 ? 'amber' : 'red'; }
 function ragCoverage(v: number) { return v >= 80 ? 'green' : v >= 65 ? 'amber' : 'red'; }
@@ -41,7 +41,7 @@ const PieTooltip = ({ active, payload }: any) => {
   return (
     <div className="bg-gt-card2 border border-gt-border rounded-xl shadow-lg p-3 text-xs">
       <p style={{ color: d.payload.fill }} className="font-semibold">{d.name}</p>
-      <p className="text-gt-text mt-0.5">₦{d.value?.toFixed(0)}bn</p>
+      <p className="text-gt-text mt-0.5">₦{(d.value / 1e9)?.toFixed(0)}bn</p>
       <p className="text-gt-muted">{((d.value / d.payload.total) * 100).toFixed(1)}% of loan book</p>
     </div>
   );

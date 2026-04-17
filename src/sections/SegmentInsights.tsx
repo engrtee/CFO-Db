@@ -8,7 +8,7 @@ import { useDb } from '../lib/DbContext';
 import { SectionCard } from '../components/SectionCard';
 import { DataTable } from '../components/DataTable';
 
-const bn = (n: number) => '₦' + n.toFixed(1) + 'bn';
+const bn = (n: number) => '₦' + (n / 1e9).toFixed(1) + 'bn';
 const mn = (n: number) => n.toFixed(2) + 'mn';
 const k  = (n: number) => n.toFixed(0) + 'k';
 
@@ -23,7 +23,7 @@ const DkTooltip = ({ active, payload, label }: any) => {
         <p key={p.name} style={{ color: p.color ?? p.fill }} className="flex justify-between gap-4">
           <span>{p.name}</span>
           <span className="font-mono">
-            {p.dataKey?.includes('customers') ? p.value?.toFixed(2) + 'mn' : '₦' + p.value?.toFixed(1) + 'bn'}
+            {p.dataKey?.includes('customers') ? p.value?.toFixed(2) + 'mn' : '₦' + (p.value / 1e9)?.toFixed(1) + 'bn'}
           </span>
         </p>
       ))}
@@ -108,7 +108,7 @@ const SegmentInsights: React.FC = () => {
               <CartesianGrid strokeDasharray="3 3" stroke="#333" vertical={false} />
               <XAxis dataKey="date" tick={{ fontSize: 9, fill: '#AAA' }} axisLine={false} tickLine={false} />
               <YAxis tick={{ fontSize: 10, fill: '#AAA' }} axisLine={false} tickLine={false}
-                tickFormatter={(v) => `₦${v}`} width={38} />
+                tickFormatter={(v) => `₦${(v / 1e9).toFixed(1)}bn`} width={52} />
               <Tooltip content={<DkTooltip />} />
               <Legend iconType="square" iconSize={8} wrapperStyle={{ fontSize: 11 }} />
               <Bar dataKey="Retail"    fill={SEGMENT_COLORS.Retail}    stackId="s" />

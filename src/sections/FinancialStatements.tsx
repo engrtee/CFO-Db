@@ -5,7 +5,7 @@ import { useDb } from '../lib/DbContext';
 type Tab = 'income' | 'balance' | 'notes';
 
 function fmt(n: number, dec = 1): string {
-  return n.toLocaleString('en-NG', { minimumFractionDigits: dec, maximumFractionDigits: dec });
+  return (n / 1e9).toLocaleString('en-NG', { minimumFractionDigits: dec, maximumFractionDigits: dec });
 }
 
 function Row({ label, value, bold, indent, highlight }: {
@@ -161,14 +161,14 @@ const Notes: React.FC<{ data: ReturnType<typeof useDb>['data'] }> = ({ data }) =
     { label: 'Note 1: Accounting Basis',       value: 'IFRS — prepared under the International Financial Reporting Standards as issued by the IASB' },
     { label: 'Note 2: Functional Currency',    value: 'Nigerian Naira (₦). USD/NGN rate at 31 Dec 2024: ₦1,535/$1' },
     { label: 'Note 3: Segment Reporting',      value: '4 reportable segments: Retail Banking, Corporate Banking, SME Banking, Treasury & Markets' },
-    { label: 'Note 4: Credit Risk — Stage 1',  value: `${ri_l.stage1_exposure.toFixed(0)}bn — 12-month ECL applied (performing loans)` },
-    { label: 'Note 5: Credit Risk — Stage 2',  value: `${ri_l.stage2_exposure.toFixed(0)}bn — Lifetime ECL, significant increase in credit risk` },
-    { label: 'Note 6: Credit Risk — Stage 3',  value: `${ri_l.stage3_exposure.toFixed(0)}bn — Lifetime ECL, credit-impaired (NPL). Coverage: ${ri_l.npl_coverage.toFixed(1)}%` },
+    { label: 'Note 4: Credit Risk — Stage 1',  value: `₦${(ri_l.stage1_exposure / 1e9).toFixed(0)}bn — 12-month ECL applied (performing loans)` },
+    { label: 'Note 5: Credit Risk — Stage 2',  value: `₦${(ri_l.stage2_exposure / 1e9).toFixed(0)}bn — Lifetime ECL, significant increase in credit risk` },
+    { label: 'Note 6: Credit Risk — Stage 3',  value: `₦${(ri_l.stage3_exposure / 1e9).toFixed(0)}bn — Lifetime ECL, credit-impaired (NPL). Coverage: ${ri_l.npl_coverage.toFixed(1)}%` },
     { label: 'Note 7: Liquidity (LCR)',        value: `${lm_l.lcr}% — regulatory minimum 100%. Maintained comfortably above threshold.` },
     { label: 'Note 8: Liquidity (NSFR)',       value: `${lm_l.nsfr}% — regulatory minimum 100%.` },
     { label: 'Note 9: FX Exposure',            value: `Net open position: USD $${tm_l.fx_usd_exposure}mn, GBP £${tm_l.fx_gbp_exposure}mn, EUR €${tm_l.fx_eur_exposure}mn. DV01: ₦${tm_l.dv01}mn` },
-    { label: 'Note 10: Capital Adequacy',      value: `Open position used: ${tm_l.open_position_vs_limit.toFixed(1)}% of CBN limit. NII at Risk: ₦${tm_l.nii_at_risk.toFixed(1)}bn` },
-    { label: 'Note 11: Investment Securities', value: `Portfolio value: ₦${tm_l.portfolio_value.toFixed(1)}bn. Yield: ${tm_l.yield_on_securities.toFixed(2)}% avg.` },
+    { label: 'Note 10: Capital Adequacy',      value: `Open position used: ${tm_l.open_position_vs_limit.toFixed(1)}% of CBN limit. NII at Risk: ₦${(tm_l.nii_at_risk / 1e9).toFixed(1)}bn` },
+    { label: 'Note 11: Investment Securities', value: `Portfolio value: ₦${(tm_l.portfolio_value / 1e9).toFixed(1)}bn. Yield: ${tm_l.yield_on_securities.toFixed(2)}% avg.` },
     { label: 'Note 12: Related Party Transactions', value: "All transactions with related parties are at arm's length. Details in Annual Report section 7." },
   ] as unknown as Record<string, unknown>[];
 

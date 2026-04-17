@@ -6,7 +6,7 @@ import { SectionCard } from '../components/SectionCard';
 import { DataTable } from '../components/DataTable';
 
 const pct = (n: number) => n.toFixed(1) + '%';
-const bn  = (n: number) => '₦' + n.toLocaleString('en-NG', { minimumFractionDigits: 0, maximumFractionDigits: 1 }) + 'bn';
+const bn  = (n: number) => '₦' + (n / 1e9).toFixed(1) + 'bn';
 
 function polarToCartesian(cx: number, cy: number, r: number, deg: number) {
   const rad = ((deg - 90) * Math.PI) / 180;
@@ -100,7 +100,7 @@ const LiquidityFunding: React.FC = () => {
             { label: 'Loan-to-Deposit Ratio', value: pct(latest.loan_to_deposit_ratio), note: 'Target: ≤80%',   good: latest.loan_to_deposit_ratio <= 80 },
             { label: 'Retail Funding',         value: pct(latest.retail_funding_pct),   note: 'Stable core',     good: latest.retail_funding_pct >= 60 },
             { label: 'Wholesale Funding',      value: pct(latest.wholesale_funding_pct),note: 'Short-term risk', good: latest.wholesale_funding_pct <= 35 },
-            { label: 'Interbank Borrowings',   value: bn(latest.interbank_borrowings),  note: latest.maturity_bucket, good: latest.interbank_borrowings < 350 },
+            { label: 'Interbank Borrowings',   value: bn(latest.interbank_borrowings),  note: latest.maturity_bucket, good: latest.interbank_borrowings < 350_000_000_000 },
           ].map((m) => (
             <div key={m.label} className={`rounded-xl border p-3 ${m.good ? 'border-gt-border bg-gt-card2' : 'border-gt-amber/30 bg-gt-amber/5'}`}>
               <p className="text-xs font-medium text-gt-muted uppercase tracking-wide leading-tight">{m.label}</p>

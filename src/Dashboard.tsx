@@ -15,6 +15,9 @@ import InvestorRelations    from './sections/InvestorRelations';
 import CompetitorAnalysis   from './sections/CompetitorAnalysis';
 import FinancialStatements  from './sections/FinancialStatements';
 import AdminPage            from './sections/AdminPage';
+import SectoralAnalysis     from './sections/SectoralAnalysis';
+import PortfolioSegments    from './sections/PortfolioSegments';
+import RegionalAnalysis     from './sections/RegionalAnalysis';
 
 const Dashboard: React.FC = () => (
   <div className="flex h-screen bg-gt-bg overflow-hidden">
@@ -36,6 +39,9 @@ const Dashboard: React.FC = () => (
           <Route path="/competitor"            element={<CompetitorAnalysis />} />
           <Route path="/financial-statements"  element={<FinancialStatements />} />
           <Route path="/admin"                 element={<AdminPage />} />
+          <Route path="/sectoral-analysis"     element={<SectoralAnalysis />} />
+          <Route path="/portfolio-segments"    element={<PortfolioSegments />} />
+          <Route path="/regional-analysis"     element={<RegionalAnalysis />} />
         </Routes>
       </main>
     </div>

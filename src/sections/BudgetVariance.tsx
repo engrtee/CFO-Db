@@ -17,7 +17,7 @@ const DkTooltip = ({ active, payload, label }: any) => {
       <p className="font-semibold text-gt-text mb-2 leading-snug">{label}</p>
       {payload.map((p: any) => (
         <p key={p.name} style={{ color: p.color }} className="flex justify-between gap-4">
-          <span>{p.name}</span><span className="font-mono">₦{p.value?.toFixed(1)}bn</span>
+          <span>{p.name}</span><span className="font-mono">₦{(p.value / 1e9)?.toFixed(1)}bn</span>
         </p>
       ))}
     </div>
@@ -87,12 +87,12 @@ const BudgetVariance: React.FC = () => {
         <div className="ml-auto flex items-center gap-4 bg-gt-card2 border border-gt-border rounded-xl px-4 py-3">
           <div className="text-right">
             <p className="text-xs text-gt-muted">Favourable</p>
-            <p className="text-base font-bold text-gt-green">+₦{totalFav.toFixed(1)}bn</p>
+            <p className="text-base font-bold text-gt-green">+₦{(totalFav / 1e9).toFixed(1)}bn</p>
           </div>
           <div className="w-px h-8 bg-gt-border" />
           <div className="text-right">
             <p className="text-xs text-gt-muted">Adverse</p>
-            <p className="text-base font-bold text-gt-red">-₦{Math.abs(totalAdv).toFixed(1)}bn</p>
+            <p className="text-base font-bold text-gt-red">-₦{(Math.abs(totalAdv) / 1e9).toFixed(1)}bn</p>
           </div>
         </div>
       </div>
@@ -105,7 +105,7 @@ const BudgetVariance: React.FC = () => {
           <CartesianGrid strokeDasharray="3 3" stroke="#333" vertical={false} />
           <XAxis dataKey="name" tick={{ fontSize: 9, fill: '#AAA' }} axisLine={false} tickLine={false} />
           <YAxis tick={{ fontSize: 10, fill: '#AAA' }} axisLine={false} tickLine={false}
-            tickFormatter={(v) => `₦${v}`} width={48} />
+            tickFormatter={(v) => `₦${(v / 1e9).toFixed(0)}bn`} width={60} />
           <Tooltip content={<DkTooltip />} />
           <Legend iconType="square" iconSize={8} wrapperStyle={{ fontSize: 11 }} />
           <Bar dataKey="Budget" fill="#555" radius={[4, 4, 0, 0]} />
@@ -135,10 +135,10 @@ const BudgetVariance: React.FC = () => {
                 return (
                   <tr key={r.id} className="hover:bg-gt-card2 transition-colors">
                     <td className="px-4 py-2.5 text-gt-text font-medium whitespace-nowrap">{r.line_item}</td>
-                    <td className="px-4 py-2.5 text-gt-muted font-mono text-xs">{r.budget_amount.toFixed(1)}</td>
-                    <td className="px-4 py-2.5 text-gt-muted font-mono text-xs">{r.actual_amount.toFixed(1)}</td>
+                    <td className="px-4 py-2.5 text-gt-muted font-mono text-xs">{(r.budget_amount / 1e9).toFixed(1)}</td>
+                    <td className="px-4 py-2.5 text-gt-muted font-mono text-xs">{(r.actual_amount / 1e9).toFixed(1)}</td>
                     <td className={`px-4 py-2.5 font-mono text-xs font-semibold ${fav ? 'text-gt-green' : 'text-gt-red'}`}>
-                      {fav ? '+' : ''}{r.variance_ngn.toFixed(1)}
+                      {fav ? '+' : ''}{(r.variance_ngn / 1e9).toFixed(1)}
                     </td>
                     <td className={`px-4 py-2.5 font-mono text-xs font-semibold ${fav ? 'text-gt-green' : 'text-gt-red'}`}>
                       {fav ? '+' : ''}{r.variance_pct.toFixed(1)}%

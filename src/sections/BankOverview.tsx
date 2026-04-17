@@ -82,15 +82,15 @@ const BankOverview: React.FC = () => {
   const cmL = cm[cm.length - 1];  const cmP = cm[cm.length - 2];
   const siL = si[si.length - 1];
 
-  // In mock mode sum all monthly rows so "Annual Revenue/PAT" shows full-year figures
-  const totalRevenue = kpis.revenue    ?? fp.reduce((s, r) => s + r.revenue, 0);
-  const totalPAT     = kpis.pat        ?? fp.reduce((s, r) => s + r.pat, 0);
-  const totalAssets  = kpis.totalAssets ?? bsL.total_assets;
-  const nplRatio     = kpis.nplRatio   ?? riL.npl_ratio;
+  // Sum monthly rows for full-year figures; use || so API returning 0 falls back to mock
+  const totalRevenue = kpis.revenue    || fp.reduce((s, r) => s + r.revenue, 0);
+  const totalPAT     = kpis.pat        || fp.reduce((s, r) => s + r.pat, 0);
+  const totalAssets  = kpis.totalAssets || bsL.total_assets;
+  const nplRatio     = kpis.nplRatio   || riL.npl_ratio;
   const nplCoverage  = riL.npl_coverage;
-  // Annual EPS = full-year PAT / 29.43bn shares; annual for P/E calculation
+  // Annual EPS = full-year PAT / 29.43bn shares
   const SHARES_BN    = 29.43;
-  const annualEPS    = (kpis.pat ?? fp.reduce((s, r) => s + r.pat, 0)) / (SHARES_BN * 1e9);
+  const annualEPS    = totalPAT / (SHARES_BN * 1e9);
 
   const panels: PanelProps[] = [
     {
@@ -195,7 +195,7 @@ const BankOverview: React.FC = () => {
       {/* Page header */}
       <div className="flex items-start justify-between flex-wrap gap-3">
         <div>
-          <h1 className="text-xl font-bold text-gt-text uppercase tracking-wide">CFO Executive Dashboard</h1>
+          <h1 className="text-xl font-bold text-gt-text uppercase tracking-wide">Performance Management Analytics Solution</h1>
           <p className="text-xs text-gt-muted mt-0.5">
             Guaranty Trust Bank Plc · FY 2024 · All figures in NGN
           </p>

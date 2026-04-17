@@ -169,24 +169,24 @@ export interface CostMetricRow {
   staff_cost: number;           // ₦ raw naira (monthly)
   it_cost: number;              // ₦ raw naira (monthly)
   admin_cost: number;           // ₦ raw naira (monthly)
-  operational_losses: number;   // ₦ thousands (small amounts)
+  operational_losses: number;   // ₦ raw naira
   headcount: number;
 }
 
 // Annual OpEx from TB: Staff ₦45.5bn | Other ₦77.5bn | D&A ₦8.7bn | Total ₦131.7bn
 export const cost_metrics: CostMetricRow[] = [
-  { id:  1, date: "Jan 2024", cost_to_income_ratio: 53.1, total_opex:  9_836_444_000, staff_cost: 3_398_099_000, it_cost:   696_000_000, admin_cost: 5_742_345_000, operational_losses: 156_000, headcount: 12_420 },
-  { id:  2, date: "Feb 2024", cost_to_income_ratio: 52.8, total_opex: 10_079_355_000, staff_cost: 3_480_993_000, it_cost:   713_000_000, admin_cost: 5_885_362_000, operational_losses: 178_000, headcount: 12_455 },
-  { id:  3, date: "Mar 2024", cost_to_income_ratio: 52.5, total_opex: 10_322_266_000, staff_cost: 3_563_887_000, it_cost:   730_000_000, admin_cost: 6_028_379_000, operational_losses: 142_000, headcount: 12_510 },
-  { id:  4, date: "Apr 2024", cost_to_income_ratio: 52.2, total_opex: 10_443_721_000, staff_cost: 3_605_334_000, it_cost:   738_000_000, admin_cost: 6_100_387_000, operational_losses: 205_000, headcount: 12_560 },
-  { id:  5, date: "May 2024", cost_to_income_ratio: 51.9, total_opex: 10_686_632_000, staff_cost: 3_688_228_000, it_cost:   755_000_000, admin_cost: 6_243_404_000, operational_losses: 191_000, headcount: 12_610 },
-  { id:  6, date: "Jun 2024", cost_to_income_ratio: 51.6, total_opex: 10_929_543_000, staff_cost: 3_771_122_000, it_cost:   772_000_000, admin_cost: 6_386_421_000, operational_losses: 165_000, headcount: 12_650 },
-  { id:  7, date: "Jul 2024", cost_to_income_ratio: 51.9, total_opex: 11_051_000_000, staff_cost: 3_812_569_000, it_cost:   780_000_000, admin_cost: 6_458_431_000, operational_losses: 262_000, headcount: 12_690 },
-  { id:  8, date: "Aug 2024", cost_to_income_ratio: 51.4, total_opex: 11_293_911_000, staff_cost: 3_895_463_000, it_cost:   797_000_000, admin_cost: 6_601_448_000, operational_losses: 156_000, headcount: 12_730 },
-  { id:  9, date: "Sep 2024", cost_to_income_ratio: 51.2, total_opex: 11_536_822_000, staff_cost: 3_978_357_000, it_cost:   814_000_000, admin_cost: 6_744_465_000, operational_losses: 139_000, headcount: 12_760 },
-  { id: 10, date: "Oct 2024", cost_to_income_ratio: 51.3, total_opex: 11_658_277_000, staff_cost: 4_019_804_000, it_cost:   822_000_000, admin_cost: 6_816_473_000, operational_losses: 184_000, headcount: 12_785 },
-  { id: 11, date: "Nov 2024", cost_to_income_ratio: 51.0, total_opex: 11_901_188_000, staff_cost: 4_102_698_000, it_cost:   839_000_000, admin_cost: 6_959_490_000, operational_losses: 167_000, headcount: 12_800 },
-  { id: 12, date: "Dec 2024", cost_to_income_ratio: 50.8, total_opex: 12_002_980_000, staff_cost: 4_144_027_000, it_cost:   848_000_000, admin_cost: 7_010_953_000, operational_losses: 205_000, headcount: 12_824 },
+  { id:  1, date: "Jan 2024", cost_to_income_ratio: 53.1, total_opex:  9_836_444_000, staff_cost: 3_398_099_000, it_cost:   696_000_000, admin_cost: 5_742_345_000, operational_losses: 156_000_000, headcount: 12_420 },
+  { id:  2, date: "Feb 2024", cost_to_income_ratio: 52.8, total_opex: 10_079_355_000, staff_cost: 3_480_993_000, it_cost:   713_000_000, admin_cost: 5_885_362_000, operational_losses: 178_000_000, headcount: 12_455 },
+  { id:  3, date: "Mar 2024", cost_to_income_ratio: 52.5, total_opex: 10_322_266_000, staff_cost: 3_563_887_000, it_cost:   730_000_000, admin_cost: 6_028_379_000, operational_losses: 142_000_000, headcount: 12_510 },
+  { id:  4, date: "Apr 2024", cost_to_income_ratio: 52.2, total_opex: 10_443_721_000, staff_cost: 3_605_334_000, it_cost:   738_000_000, admin_cost: 6_100_387_000, operational_losses: 205_000_000, headcount: 12_560 },
+  { id:  5, date: "May 2024", cost_to_income_ratio: 51.9, total_opex: 10_686_632_000, staff_cost: 3_688_228_000, it_cost:   755_000_000, admin_cost: 6_243_404_000, operational_losses: 191_000_000, headcount: 12_610 },
+  { id:  6, date: "Jun 2024", cost_to_income_ratio: 51.6, total_opex: 10_929_543_000, staff_cost: 3_771_122_000, it_cost:   772_000_000, admin_cost: 6_386_421_000, operational_losses: 165_000_000, headcount: 12_650 },
+  { id:  7, date: "Jul 2024", cost_to_income_ratio: 51.9, total_opex: 11_051_000_000, staff_cost: 3_812_569_000, it_cost:   780_000_000, admin_cost: 6_458_431_000, operational_losses: 262_000_000, headcount: 12_690 },
+  { id:  8, date: "Aug 2024", cost_to_income_ratio: 51.4, total_opex: 11_293_911_000, staff_cost: 3_895_463_000, it_cost:   797_000_000, admin_cost: 6_601_448_000, operational_losses: 156_000_000, headcount: 12_730 },
+  { id:  9, date: "Sep 2024", cost_to_income_ratio: 51.2, total_opex: 11_536_822_000, staff_cost: 3_978_357_000, it_cost:   814_000_000, admin_cost: 6_744_465_000, operational_losses: 139_000_000, headcount: 12_760 },
+  { id: 10, date: "Oct 2024", cost_to_income_ratio: 51.3, total_opex: 11_658_277_000, staff_cost: 4_019_804_000, it_cost:   822_000_000, admin_cost: 6_816_473_000, operational_losses: 184_000_000, headcount: 12_785 },
+  { id: 11, date: "Nov 2024", cost_to_income_ratio: 51.0, total_opex: 11_901_188_000, staff_cost: 4_102_698_000, it_cost:   839_000_000, admin_cost: 6_959_490_000, operational_losses: 167_000_000, headcount: 12_800 },
+  { id: 12, date: "Dec 2024", cost_to_income_ratio: 50.8, total_opex: 12_002_980_000, staff_cost: 4_144_027_000, it_cost:   848_000_000, admin_cost: 7_010_953_000, operational_losses: 205_000_000, headcount: 12_824 },
 ];
 
 // ── 8. Customer & Business Segment Insights ──────────────────────────────────

@@ -63,7 +63,7 @@ const Header: React.FC = () => {
               </div>
               <div className="min-w-0">
                 <p className="text-gt-orange text-xs font-bold uppercase tracking-widest leading-tight hidden sm:block">
-                  CFO Executive Dashboard
+                  Performance Management Intelligence Solution
                 </p>
                 <p className="text-gt-muted text-xs hidden md:block truncate">
                   Guaranty Trust Bank Plc · NGN ₦ · December 2024

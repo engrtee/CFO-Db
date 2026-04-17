@@ -3,7 +3,7 @@ import { Link, useLocation } from 'react-router-dom';
 import {
   LayoutDashboard, TrendingUp, Landmark, ShieldAlert, Droplets,
   Building2, Target, Activity, Users, ChevronLeft, ChevronRight,
-  FileText, Settings2, PieChart,
+  FileText, Settings2, PieChart, BarChart2, Layers, MapPin,
 } from 'lucide-react';
 
 const navGroups = [
@@ -13,6 +13,14 @@ const navGroups = [
       { path: '/',                icon: LayoutDashboard, label: 'Dashboard Overview' },
       { path: '/investor',        icon: PieChart,        label: 'Investor Relations' },
       { path: '/competitor',      icon: TrendingUp,      label: 'Competitor Analysis' },
+    ],
+  },
+  {
+    label: 'Analytical Dimensions',
+    items: [
+      { path: '/sectoral-analysis',  icon: BarChart2, label: 'Sectoral Analysis'   },
+      { path: '/portfolio-segments', icon: Layers,    label: 'Portfolio Segments'  },
+      { path: '/regional-analysis',  icon: MapPin,    label: 'Regional Analysis'   },
     ],
   },
   {
@@ -53,17 +61,17 @@ const Sidebar: React.FC = () => {
 
   return (
     <aside
-      className={`${collapsed ? 'w-14' : 'w-60'} bg-[#923403] flex flex-col transition-all duration-300 ease-in-out flex-shrink-0 border-r border-[#7a2c02]`}
+      className={`${collapsed ? 'w-14' : 'w-60'} bg-[#D96000] flex flex-col transition-all duration-300 ease-in-out flex-shrink-0 border-r border-[#BA5000]`}
     >
       {/* Logo */}
-      <div className={`p-4 border-b border-[#7a2c02] flex items-center gap-3 ${collapsed ? 'justify-center' : ''}`}>
+      <div className={`p-4 border-b border-[#BA5000] flex items-center gap-3 ${collapsed ? 'justify-center' : ''}`}>
         <div className="w-9 h-9 bg-white rounded-lg flex items-center justify-center flex-shrink-0">
           <span className="text-gt-orange font-black text-sm leading-none">GT</span>
         </div>
         {!collapsed && (
           <div className="min-w-0">
-            <p className="text-white text-xs font-bold uppercase tracking-widest leading-tight">GTBank</p>
-            <p className="text-orange-200 text-xs truncate">CFO Intelligence</p>
+            <p className="text-white text-xs font-bold uppercase tracking-widest leading-tight">PMIS</p>
+            <p className="text-orange-200 text-xs truncate">Intelligence Solution</p>
           </div>
         )}
       </div>
@@ -88,11 +96,11 @@ const Sidebar: React.FC = () => {
                       title={collapsed ? item.label : undefined}
                       className={`flex items-center gap-3 px-3 py-2 rounded-lg transition-all duration-150 group ${
                         isActive
-                          ? 'bg-white/20 text-gt-text font-semibold'
-                          : 'text-gt-text/80 hover:bg-white/10 hover:text-gt-text'
+                          ? 'bg-white/20 text-white font-semibold'
+                          : 'text-white/80 hover:bg-white/10 hover:text-white'
                       } ${collapsed ? 'justify-center' : ''}`}
                     >
-                      <Icon className={`w-4 h-4 flex-shrink-0 ${isActive ? 'text-gt-text' : 'text-gt-text/70 group-hover:text-gt-text'}`} />
+                      <Icon className={`w-4 h-4 flex-shrink-0 ${isActive ? 'text-white' : 'text-white/70 group-hover:text-white'}`} />
                       {!collapsed && (
                         <span className="text-xs font-medium truncate">{item.label}</span>
                       )}
@@ -106,10 +114,10 @@ const Sidebar: React.FC = () => {
       </nav>
 
       {/* Collapse toggle */}
-      <div className="p-3 border-t border-[#7a2c02]">
+      <div className="p-3 border-t border-[#BA5000]">
         <button
           onClick={() => setCollapsed(!collapsed)}
-          className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg text-gt-text/80 hover:bg-white/10 hover:text-gt-text transition-colors ${collapsed ? 'justify-center' : ''}`}
+          className={`w-full flex items-center gap-2 px-3 py-2 rounded-lg text-white/80 hover:bg-white/10 hover:text-white transition-colors ${collapsed ? 'justify-center' : ''}`}
         >
           {collapsed
             ? <ChevronRight className="w-4 h-4" />

@@ -5,8 +5,8 @@ import { useDb } from '../lib/DbContext';
 import { SectionCard } from '../components/SectionCard';
 import { DataTable } from '../components/DataTable';
 
-const bn = (n: number) => '₦' + n.toLocaleString('en-NG', { minimumFractionDigits: 1, maximumFractionDigits: 1 }) + 'bn';
-const tn = (n: number) => '₦' + (n / 1000).toFixed(2) + 'tn';
+const bn = (n: number) => '₦' + (n / 1e9).toFixed(1) + 'bn';
+const tn = (n: number) => '₦' + (n / 1e12).toFixed(2) + 'tn';
 
 interface KpiCardProps { label: string; value: string; change: number; note?: string }
 function KpiCard({ label, value, change, note }: KpiCardProps) {
@@ -34,7 +34,7 @@ const DkTooltip = ({ active, payload, label }: any) => {
       {payload.map((p: any) => (
         <p key={p.name} style={{ color: p.color }} className="flex justify-between gap-4">
           <span>{p.name}</span>
-          <span className="font-mono font-medium">₦{p.value?.toFixed(0)}bn</span>
+          <span className="font-mono font-medium">₦{(p.value / 1e9)?.toFixed(0)}bn</span>
         </p>
       ))}
     </div>
@@ -93,7 +93,7 @@ const BalanceSheet: React.FC = () => {
           <XAxis dataKey="name" tick={{ fontSize: 10, fill: '#AAA' }} axisLine={false} tickLine={false} />
           <YAxis
             tick={{ fontSize: 10, fill: '#AAA' }} axisLine={false} tickLine={false}
-            tickFormatter={(v) => `${(v / 1000).toFixed(1)}tn`} width={52}
+            tickFormatter={(v) => `${(v / 1e12).toFixed(2)}tn`} width={52}
           />
           <Tooltip content={<DkTooltip />} />
           <Legend iconType="square" iconSize={8} wrapperStyle={{ fontSize: 11 }} />

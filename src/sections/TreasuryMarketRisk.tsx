@@ -8,7 +8,7 @@ import { useDb } from '../lib/DbContext';
 import { SectionCard } from '../components/SectionCard';
 import { DataTable } from '../components/DataTable';
 
-const bn  = (n: number) => '₦' + n.toFixed(1) + 'bn';
+const bn  = (n: number) => '₦' + (n / 1e9).toFixed(1) + 'bn';
 const pct = (n: number) => n.toFixed(1) + '%';
 
 const DkTooltip = ({ active, payload, label }: any) => {
@@ -61,7 +61,7 @@ const TreasuryMarketRisk: React.FC = () => {
           { label: 'Portfolio Value',     value: bn(latest.portfolio_value),      sub: `Prior: ${bn(prev.portfolio_value)}`,     good: latest.portfolio_value > prev.portfolio_value },
           { label: 'Yield on Securities', value: pct(latest.yield_on_securities), sub: `Prior: ${pct(prev.yield_on_securities)}`, good: true },
           { label: 'DV01 (₦mn)',          value: '₦' + latest.dv01 + 'mn',        sub: '₦ value of 1bp shift',                   good: latest.dv01 < 160 },
-          { label: 'NII at Risk',         value: bn(latest.nii_at_risk),          sub: 'Stress: +/-200bp',                       good: latest.nii_at_risk < 25 },
+          { label: 'NII at Risk',         value: bn(latest.nii_at_risk),          sub: 'Stress: +/-200bp',                       good: latest.nii_at_risk < 25_000_000_000 },
         ].map((m) => (
           <div key={m.label} className={`rounded-xl border p-4 ${m.good ? 'border-gt-border bg-gt-card2' : 'border-gt-amber/30 bg-gt-amber/5'}`}>
             <p className="text-xs font-medium text-gt-muted uppercase tracking-wide">{m.label}</p>
@@ -131,7 +131,7 @@ const TreasuryMarketRisk: React.FC = () => {
                 return (
                   <div
                     key={r.date}
-                    title={`${r.date}: ₦${r.portfolio_value}bn`}
+                    title={`${r.date}: ₦${(r.portfolio_value / 1e9).toFixed(1)}bn`}
                     className="flex-1 rounded-t-sm transition-all duration-300 cursor-pointer"
                     style={{ height: `${h}%`, backgroundColor: isLatest ? '#F58220' : '#444' }}
                   />
