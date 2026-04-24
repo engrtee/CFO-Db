@@ -12,7 +12,8 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 // ── DB Connection ─────────────────────────────────────────────────────────────
 const pool = new Pool({
-  connectionString: 'postgresql://postgres:password@localhost:5432/FinancialDB',
+  connectionString: process.env.DATABASE_URL || 'postgresql://postgres:password@localhost:5432/FinancialDB',
+  ssl: process.env.DATABASE_URL ? { rejectUnauthorized: false } : false,
 });
 
 pool.on('error', (err) => console.error('DB pool error:', err));
@@ -229,8 +230,8 @@ app.post('/api/sync-caseware', async (req, res) => {
 
     const latestFile = files[0].path;
     const scriptPath = path.join(__dirname, '..', '..', 'caseware_ingest.py');
-    const dbUrl = 'postgresql://postgres:password@localhost:5432/FinancialDB';
-    
+    const dbUrl = process.env.DATABASE_URL || 'postgresql://postgres:password@localhost:5432/FinancialDB';
+
     exec(`python "${scriptPath}" "${latestFile}" "${dbUrl}"`, async (err, stdout, stderr) => {
       if (err) {
         console.error('Ingestion error stdout:', stdout);
@@ -514,7 +515,7 @@ async function runUploadIngest(req, res) {
   fs.renameSync(req.file.path, destPath);
 
   const scriptPath = path.join(__dirname, '..', '..', 'caseware_ingest.py');
-  const dbUrl      = 'postgresql://postgres:password@localhost:5432/FinancialDB';
+  const dbUrl      = process.env.DATABASE_URL || 'postgresql://postgres:password@localhost:5432/FinancialDB';
 
   exec(`python "${scriptPath}" "${destPath}" "${dbUrl}"`, (err, stdout, stderr) => {
     if (err) {
