@@ -52,7 +52,7 @@ const SyncModal: React.FC<SyncModalProps> = ({ open, onComplete }) => {
             GT
           </div>
           <div>
-            <p className="text-xs text-gt-muted uppercase tracking-widest">Guaranty Trust Bank</p>
+            <p className="text-xs text-gt-muted uppercase tracking-widest">Performance Management Intelligence Solution</p>
             <p className="text-sm font-bold text-gt-text">CaseWare Sync in Progress</p>
           </div>
         </div>

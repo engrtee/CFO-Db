@@ -78,7 +78,7 @@ export async function seedExpenses() {
 export async function seedTaxRecords() {
   const currentYear = 2025;
   const quarters = [1, 2, 3];
-  const entities = ['GTBank PLC', 'Subsidiary A', 'Subsidiary B'];
+  const entities = ['The Bank PLC', 'Subsidiary A', 'Subsidiary B'];
   const taxTypes = ['Corporate Income Tax', 'VAT', 'Withholding Tax', 'Property Tax'];
 
   const taxRecords = [];

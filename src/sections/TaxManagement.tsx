@@ -10,10 +10,10 @@ const TaxManagement: React.FC = () => {
   const [comparisonEnabled, setComparisonEnabled] = useState(true);
 
   const upcomingDueDates = [
-    { date: '2025-10-15', taxType: 'Corporate Income Tax', entity: 'GTBank PLC', amount: 52, status: 'pending' },
-    { date: '2025-10-20', taxType: 'VAT', entity: 'GTBank PLC', amount: 18, status: 'pending' },
+    { date: '2025-10-15', taxType: 'Corporate Income Tax', entity: 'The Bank PLC', amount: 52, status: 'pending' },
+    { date: '2025-10-20', taxType: 'VAT', entity: 'The Bank PLC', amount: 18, status: 'pending' },
     { date: '2025-10-31', taxType: 'Withholding Tax', entity: 'Subsidiary A', amount: 12, status: 'pending' },
-    { date: '2025-11-10', taxType: 'Property Tax', entity: 'GTBank PLC', amount: 8, status: 'pending' },
+    { date: '2025-11-10', taxType: 'Property Tax', entity: 'The Bank PLC', amount: 8, status: 'pending' },
   ];
 
   const taxHistory = [

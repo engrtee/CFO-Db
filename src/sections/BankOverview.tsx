@@ -182,9 +182,9 @@ const BankOverview: React.FC = () => {
     {
       path: '/competitor', icon: TrendingUp, label: 'Competitor Analysis',
       kpis: [
-        { label: 'GTBank ROE',  value: fmtPct(fpL.roe),          change: fpL.roe - 30.1 },
-        { label: 'GTBank CIR',  value: fmtPct(cmL.cost_to_income_ratio), change: -(cmL.cost_to_income_ratio - 40.5), goodUp: false },
-        { label: 'GTBank NPL',  value: fmtPct(riL.npl_ratio),   change: -(riL.npl_ratio - 4.2), goodUp: false },
+        { label: 'ROE',  value: fmtPct(fpL.roe),          change: fpL.roe - 30.1 },
+        { label: 'CIR',  value: fmtPct(cmL.cost_to_income_ratio), change: -(cmL.cost_to_income_ratio - 40.5), goodUp: false },
+        { label: 'NPL',  value: fmtPct(riL.npl_ratio),   change: -(riL.npl_ratio - 4.2), goodUp: false },
         { label: 'Peer Rank',   value: '#1 ROE' },
       ],
     },
@@ -195,9 +195,9 @@ const BankOverview: React.FC = () => {
       {/* Page header */}
       <div className="flex items-start justify-between flex-wrap gap-3">
         <div>
-          <h1 className="text-xl font-bold text-gt-text uppercase tracking-wide">Performance Management Analytics Solution</h1>
+          <h1 className="text-xl font-bold text-gt-text uppercase tracking-wide">Performance Management Intelligence Solution</h1>
           <p className="text-xs text-gt-muted mt-0.5">
-            Guaranty Trust Bank Plc · FY 2024 · All figures in NGN
+            FY 2024 · All figures in NGN
           </p>
         </div>
         <div className="text-right">

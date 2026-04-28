@@ -81,7 +81,7 @@ const InvestorRelations: React.FC = () => {
   return (
     <SectionCard
       title="Investor Relations"
-      subtitle="Guaranty Trust Bank Plc · FY 2024 · NGN"
+      subtitle="FY 2024 · NGN"
       icon={<Award className="w-5 h-5" />}
       lastSynced={lastSynced}
       loading={loading}

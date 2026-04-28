@@ -211,7 +211,7 @@ const FinancialStatements: React.FC = () => {
         <div>
           <h1 className="text-lg font-bold text-gt-text uppercase tracking-wide">Financial Statements</h1>
           <p className="text-xs text-gt-muted mt-0.5">
-            Guaranty Trust Bank Plc · FY 2024 · IFRS · ₦bn
+            FY 2024 · IFRS · ₦bn
             {usingMock && <span className="ml-2 text-gt-amber font-medium">[Demo mode]</span>}
           </p>
         </div>
@@ -265,7 +265,7 @@ const FinancialStatements: React.FC = () => {
       <div className="flex items-start gap-2 px-4 py-3 bg-gt-card border border-gt-border rounded-xl">
         <FileText className="w-4 h-4 text-gt-muted flex-shrink-0 mt-0.5" />
         <p className="text-xs text-gt-muted leading-relaxed">
-          These statements are derived from the GTBank General Ledger ingested from CaseWare.
+          These statements are derived from the General Ledger ingested from CaseWare.
           Figures are in Nigerian Naira billions (₦bn) unless otherwise stated.
           Prepared in accordance with IFRS as adopted by the Financial Reporting Council of Nigeria.
           All figures are unaudited management accounts unless a full year-end audit report has been filed.

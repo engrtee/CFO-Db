@@ -85,7 +85,7 @@ const FinancialPerformance: React.FC = () => {
   return (
     <SectionCard
       title="Financial Performance Metrics"
-      subtitle="Monthly P&L summary — Guaranty Trust Bank Plc (₦bn)"
+      subtitle="Monthly P&L summary — FY 2024 (₦bn)"
       icon={<TrendingUp className="w-5 h-5" />}
       lastSynced={lastSynced}
       loading={loading}

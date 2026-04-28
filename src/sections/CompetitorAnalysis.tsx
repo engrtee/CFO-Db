@@ -10,7 +10,7 @@ import { SectionCard } from '../components/SectionCard';
 import { DataTable } from '../components/DataTable';
 
 const PEERS = [
-  { name: 'GTBank',      roe: 35.2, roa: 5.1, cir: 34.2, nim: 8.4, npl: 3.1, lcr: 241, cap: 22.1, pat: 609 },
+  { name: 'Our Bank',    roe: 35.2, roa: 5.1, cir: 34.2, nim: 8.4, npl: 3.1, lcr: 241, cap: 22.1, pat: 609 },
   { name: 'Zenith Bank', roe: 31.5, roa: 4.2, cir: 37.8, nim: 7.6, npl: 4.5, lcr: 210, cap: 21.3, pat: 796 },
   { name: 'Access Bank', roe: 28.7, roa: 3.1, cir: 42.0, nim: 6.9, npl: 4.0, lcr: 195, cap: 19.8, pat: 729 },
   { name: 'UBA',         roe: 30.1, roa: 3.8, cir: 39.5, nim: 7.1, npl: 3.8, lcr: 205, cap: 20.5, pat: 607 },
@@ -19,14 +19,14 @@ const PEERS = [
 ];
 
 const QUARTERLY = [
-  { q: 'Q1 2023', GTBank: 118, Zenith: 152, Access: 138, UBA: 116, First: 98  },
-  { q: 'Q2 2023', GTBank: 130, Zenith: 165, Access: 150, UBA: 128, First: 107 },
-  { q: 'Q3 2023', GTBank: 148, Zenith: 183, Access: 168, UBA: 142, First: 118 },
-  { q: 'Q4 2023', GTBank: 163, Zenith: 201, Access: 182, UBA: 155, First: 130 },
-  { q: 'Q1 2024', GTBank: 138, Zenith: 192, Access: 171, UBA: 145, First: 115 },
-  { q: 'Q2 2024', GTBank: 155, Zenith: 208, Access: 188, UBA: 160, First: 123 },
-  { q: 'Q3 2024', GTBank: 171, Zenith: 219, Access: 200, UBA: 172, First: 132 },
-  { q: 'Q4 2024', GTBank: 188, Zenith: 233, Access: 215, UBA: 185, First: 143 },
+  { q: 'Q1 2023', 'Our Bank': 118, Zenith: 152, Access: 138, UBA: 116, First: 98  },
+  { q: 'Q2 2023', 'Our Bank': 130, Zenith: 165, Access: 150, UBA: 128, First: 107 },
+  { q: 'Q3 2023', 'Our Bank': 148, Zenith: 183, Access: 168, UBA: 142, First: 118 },
+  { q: 'Q4 2023', 'Our Bank': 163, Zenith: 201, Access: 182, UBA: 155, First: 130 },
+  { q: 'Q1 2024', 'Our Bank': 138, Zenith: 192, Access: 171, UBA: 145, First: 115 },
+  { q: 'Q2 2024', 'Our Bank': 155, Zenith: 208, Access: 188, UBA: 160, First: 123 },
+  { q: 'Q3 2024', 'Our Bank': 171, Zenith: 219, Access: 200, UBA: 172, First: 132 },
+  { q: 'Q4 2024', 'Our Bank': 188, Zenith: 233, Access: 215, UBA: 185, First: 143 },
 ];
 
 const DK = ({ active, payload, label }: any) => {
@@ -44,7 +44,7 @@ const DK = ({ active, payload, label }: any) => {
 };
 
 const COLORS: Record<string, string> = {
-  GTBank: '#F58220', Zenith: '#3B82F6', Access: '#10B981', UBA: '#EAB308', First: '#8B5CF6',
+  'Our Bank': '#F58220', Zenith: '#3B82F6', Access: '#10B981', UBA: '#EAB308', First: '#8B5CF6',
 };
 
 const METRICS = [
@@ -98,7 +98,7 @@ const CompetitorAnalysis: React.FC = () => {
   return (
     <SectionCard
       title="Competitor Analysis"
-      subtitle="GTBank vs Nigerian Tier-1 Peers · FY 2024"
+      subtitle="Our Bank vs Nigerian Tier-1 Peers · FY 2024"
       icon={<TrendingUp className="w-5 h-5" />}
       lastSynced={lastSynced}
       loading={loading}
@@ -176,11 +176,11 @@ const CompetitorAnalysis: React.FC = () => {
                   tickFormatter={v => `₦${v}`} width={44} />
                 <Tooltip content={<DK />} />
                 <Legend iconType="circle" iconSize={8} wrapperStyle={{ fontSize: 10 }} />
-                {['GTBank', 'Zenith', 'Access', 'UBA', 'First'].map(b => (
+                {['Our Bank', 'Zenith', 'Access', 'UBA', 'First'].map(b => (
                   <Line key={b} type="monotone" dataKey={b} stroke={COLORS[b] ?? '#888'}
-                    strokeWidth={b === 'GTBank' ? 2.5 : 1.5}
+                    strokeWidth={b === 'Our Bank' ? 2.5 : 1.5}
                     dot={false}
-                    strokeDasharray={b === 'GTBank' ? undefined : '4 2'} />
+                    strokeDasharray={b === 'Our Bank' ? undefined : '4 2'} />
                 ))}
               </LineChart>
             </ResponsiveContainer>
@@ -200,7 +200,7 @@ const CompetitorAnalysis: React.FC = () => {
                   <Radar key={b.name} name={b.name} dataKey={b.name}
                     stroke={COLORS[b.name] ?? '#888'}
                     fill={COLORS[b.name] ?? '#888'}
-                    fillOpacity={b.name === 'GTBank' ? 0.25 : 0.05} />
+                    fillOpacity={b.name === 'Our Bank' ? 0.25 : 0.05} />
                 ))}
                 <Legend iconType="circle" iconSize={8} wrapperStyle={{ fontSize: 10 }} />
                 <Tooltip content={<DK />} />
@@ -225,9 +225,9 @@ const CompetitorAnalysis: React.FC = () => {
               </thead>
               <tbody className="divide-y divide-gt-border">
                 {[...PEERS].sort((a, b) => b.pat - a.pat).map((b, i) => (
-                  <tr key={b.name} className={`transition-colors ${b.name === 'GTBank' ? 'bg-gt-orange/5' : 'hover:bg-gt-card2'}`}>
+                  <tr key={b.name} className={`transition-colors ${b.name === 'Our Bank' ? 'bg-gt-orange/5' : 'hover:bg-gt-card2'}`}>
                     <td className="px-3 py-2.5 text-gt-muted font-mono">{i + 1}</td>
-                    <td className="px-3 py-2.5 font-semibold text-gt-text">{b.name}{b.name === 'GTBank' && <span className="ml-1.5 text-gt-orange text-xs">(us)</span>}</td>
+                    <td className="px-3 py-2.5 font-semibold text-gt-text">{b.name}{b.name === 'Our Bank' && <span className="ml-1.5 text-gt-orange text-xs">(us)</span>}</td>
                     <td className="px-3 py-2.5 font-mono text-gt-text">{b.pat}</td>
                     <td className="px-3 py-2.5 font-mono text-gt-text">{b.roe}</td>
                     <td className="px-3 py-2.5 font-mono text-gt-text">{b.roa}</td>

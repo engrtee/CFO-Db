@@ -66,7 +66,7 @@ const Header: React.FC = () => {
                   Performance Management Intelligence Solution
                 </p>
                 <p className="text-gt-muted text-xs hidden md:block truncate">
-                  Guaranty Trust Bank Plc · NGN ₦ · December 2024
+                  The Bank · NGN ₦ · December 2024
                 </p>
               </div>
             </div>
