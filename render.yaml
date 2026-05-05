@@ -2,7 +2,7 @@ services:
   - type: web
     name: leadway-cfo-dashboard
     runtime: static
-    buildCommand: npm install && npx vite build
+    buildCommand: npm install && node ./node_modules/vite/bin/vite.js build
     staticPublishPath: dist
     pullRequestPreviewsEnabled: false
     routes:
