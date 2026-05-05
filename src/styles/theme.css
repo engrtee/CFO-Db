@@ -1,0 +1,27 @@
+/* Leadway brand design tokens — single source of truth */
+:root {
+  --color-navy:       #0A1628;
+  --color-navy-dark:  #06101C;
+  --color-panel:      #0F1E35;
+  --color-red:        #C8102E;
+  --color-red-dark:   #A50D26;
+  --color-gold:       #C9A84C;
+  --color-gold-light: #E2C97A;
+  --color-green:      #00A86B;
+  --color-amber:      #F59E0B;
+  --color-danger:     #DC2626;
+
+  --color-dark-card:    #132035;
+  --color-dark-card2:   #1A2D47;
+  --color-dark-border:  #243654;
+  --color-dark-text:    #E8EDF5;
+  --color-dark-muted:   #7A92B0;
+
+  --font-sans:  'DM Sans', system-ui, sans-serif;
+  --font-serif: 'Playfair Display', Georgia, serif;
+  --font-mono:  'IBM Plex Mono', Menlo, monospace;
+
+  --radius-card: 12px;
+  --radius-panel: 16px;
+  --shadow-card: 0 2px 12px rgba(0,0,0,0.35);
+}

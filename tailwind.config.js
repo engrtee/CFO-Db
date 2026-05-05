@@ -4,25 +4,46 @@ export default {
   theme: {
     extend: {
       colors: {
-        gt: {
-          orange:  '#F58220',
-          orangeD: '#D96E15',   // darker shade for hover
-          black:   '#000000',
-          dark:    '#1A1A1A',
-          bg:      '#F4F5F7',   // light page background
-          card:    '#FFFFFF',   // white cards
-          card2:   '#F9FAFB',   // slightly off-white secondary
-          border:  '#E2E5EA',   // light border
-          text:    '#111827',   // near-black body text
-          muted:   '#6B7280',   // grey muted text
-          amber:   '#D97706',   // amber (darker for light bg)
-          red:     '#DC2626',   // red
-          green:   '#16A34A',   // green
-          grey:    '#F3F4F6',
+        lw: {
+          navy:    '#0A1628',
+          navyD:   '#06101C',
+          panel:   '#0F1E35',
+          red:     '#C8102E',
+          redD:    '#A50D26',
+          gold:    '#C9A84C',
+          goldL:   '#E2C97A',
+          bg:      '#F4F6FA',
+          card:    '#FFFFFF',
+          card2:   '#F4F6FA',
+          border:  '#E2E5EA',
+          text:    '#111827',
+          muted:   '#6B7280',
+          green:   '#00A86B',
+          amber:   '#F59E0B',
+          danger:  '#DC2626',
+          // dark-mode card surfaces
+          darkCard:  '#132035',
+          darkCard2: '#1A2D47',
+          darkBorder:'#243654',
+          darkText:  '#E8EDF5',
+          darkMuted: '#7A92B0',
         },
       },
       fontFamily: {
-        sans: ['Inter', 'system-ui', 'sans-serif'],
+        sans:  ['DM Sans', 'system-ui', 'sans-serif'],
+        serif: ['Playfair Display', 'Georgia', 'serif'],
+        mono:  ['IBM Plex Mono', 'Menlo', 'monospace'],
+      },
+      animation: {
+        'pulse-slow': 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+        'counter':    'counterUp 0.8s ease-out forwards',
+        'fade-in':    'fadeIn 0.3s ease-in-out',
+      },
+      keyframes: {
+        fadeIn: {
+          from: { opacity: '0', transform: 'translateY(4px)' },
+          to:   { opacity: '1', transform: 'translateY(0)' },
+        },
       },
     },
   },

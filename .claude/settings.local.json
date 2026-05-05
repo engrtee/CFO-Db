@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm run *)",
+      "Bash(npx --no-install tsc -p tsconfig.app.json --noEmit)",
+      "Bash(npm cache *)",
+      "Bash(node node_modules/.bin/tsc -p tsconfig.app.json --noEmit)",
+      "Bash(node node_modules/typescript/bin/tsc -p tsconfig.app.json --noEmit)"
+    ]
+  }
+}

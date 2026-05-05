@@ -2,40 +2,75 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800;1,9..40,400&family=Playfair+Display:wght@600;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap');
+
+:root {
+  /* Leadway brand CSS variables */
+  --lw-navy:       #0A1628;
+  --lw-panel:      #0F1E35;
+  --lw-red:        #C8102E;
+  --lw-gold:       #C9A84C;
+  --lw-green:      #00A86B;
+  --lw-amber:      #F59E0B;
+  --lw-danger:     #DC2626;
+}
 
 @layer base {
   body {
-    @apply antialiased bg-gt-bg text-gt-text;
-    font-family: Inter, system-ui, sans-serif;
+    @apply antialiased bg-lw-navy text-lw-darkText;
+    font-family: 'DM Sans', system-ui, sans-serif;
     font-feature-settings: "cv02", "cv03", "cv04", "cv11";
   }
   * { @apply box-border; }
-  ::-webkit-scrollbar { width: 6px; height: 6px; }
-  ::-webkit-scrollbar-track { background: #E2E5EA; }
-  ::-webkit-scrollbar-thumb { background: #CBD2DA; border-radius: 3px; }
-  ::-webkit-scrollbar-thumb:hover { background: #F58220; }
+
+  ::-webkit-scrollbar        { width: 5px; height: 5px; }
+  ::-webkit-scrollbar-track  { background: #132035; }
+  ::-webkit-scrollbar-thumb  { background: #243654; border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover { background: #C8102E; }
 }
 
 @layer utilities {
+  /* Scrollbar */
   .scrollbar-thin {
     scrollbar-width: thin;
-    scrollbar-color: #CBD2DA #E2E5EA;
+    scrollbar-color: #243654 #132035;
   }
-  .scrollbar-thin::-webkit-scrollbar { width: 6px; height: 6px; }
-  .scrollbar-thin::-webkit-scrollbar-track { background: #E2E5EA; }
-  .scrollbar-thin::-webkit-scrollbar-thumb { background: #CBD2DA; border-radius: 3px; }
+  .scrollbar-thin::-webkit-scrollbar       { width: 5px; height: 5px; }
+  .scrollbar-thin::-webkit-scrollbar-track { background: #132035; }
+  .scrollbar-thin::-webkit-scrollbar-thumb { background: #243654; border-radius: 3px; }
 
+  /* Animations */
   .animate-fade-in {
     animation: fadeIn 0.3s ease-in-out;
   }
+
+  /* RAG pulse for Red status */
+  .rag-pulse {
+    animation: ragPulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+  @keyframes ragPulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.7); }
+    50%       { box-shadow: 0 0 0 6px rgba(220, 38, 38, 0);  }
+  }
+
   @keyframes fadeIn {
     from { opacity: 0; transform: translateY(4px); }
     to   { opacity: 1; transform: translateY(0); }
   }
 
+  /* KPI counter animation */
+  @keyframes countUp {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .animate-count-up {
+    animation: countUp 0.6s ease-out forwards;
+  }
+
+  /* Print */
   @media print {
     body { background: #fff !important; color: #000 !important; }
     .no-print { display: none !important; }
+    .print-section { page-break-inside: avoid; }
   }
 }
