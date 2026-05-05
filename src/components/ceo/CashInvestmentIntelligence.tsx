@@ -10,7 +10,6 @@ import { GaugeChart } from '../common/GaugeChart';
 import { useFilterStore } from '../../store/filterStore';
 import { getInvestmentSummary } from '../../services/investmentService';
 import { getLiquiditySummary } from '../../services/liquidityService';
-import { getConsolidatedSummary } from '../../services/consolidationService';
 import { getRagForPrescribedAssets } from '../../services/complianceService';
 import { DollarSign, TrendingUp, PieChart as PieIcon, Shield } from 'lucide-react';
 
@@ -30,11 +29,6 @@ const CashInvestmentIntelligence: React.FC = () => {
 
   const liquidity = useMemo(
     () => getLiquiditySummary({ subsidiaryCode: 'ALL', period, currency }),
-    [period, currency]
-  );
-
-  const consolidated = useMemo(
-    () => getConsolidatedSummary(period, currency),
     [period, currency]
   );
 

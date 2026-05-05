@@ -1,13 +1,11 @@
 import React, { useMemo } from 'react';
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip,
-  ResponsiveContainer, ReferenceLine, LineChart, Line, Legend, Cell,
+  ResponsiveContainer, Line, Legend,
 } from 'recharts';
 import { KPICard } from '../KPICard';
 import { SectionCard } from '../SectionCard';
-import { DataTable } from '../DataTable';
 import { useFilterStore } from '../../store/filterStore';
-import { getFinancialSummary } from '../../services/financialService';
 import { getConsolidatedSummary } from '../../services/consolidationService';
 import { BarChart2, TrendingUp, Users, Target } from 'lucide-react';
 
@@ -60,7 +58,7 @@ const CHANNEL_DATA = [
 ];
 
 const ProfitabilityAnalytics: React.FC = () => {
-  const { subsidiaryCode, currency, getAccountingPeriod } = useFilterStore();
+  const { currency, getAccountingPeriod } = useFilterStore();
   const period = getAccountingPeriod();
 
   const consolidated = useMemo(

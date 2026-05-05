@@ -1,0 +1,31 @@
+period,subsidiary,line_of_business,account_code,account_name,category,amount_ngn,budget_ngn,prior_year_ngn
+2025-04,LWL,Life,4001,Gross Written Premium — Life,Revenue,2950000000,2800000000,2650000000
+2025-04,LWL,Group Life,4002,Gross Written Premium — Group Life,Revenue,820000000,750000000,680000000
+2025-04,LWL,Annuity,4003,Gross Written Premium — Annuity,Revenue,1250000000,1200000000,1100000000
+2025-04,LWG,Motor,4010,Gross Written Premium — Motor,Revenue,1850000000,1750000000,1620000000
+2025-04,LWG,Fire & Special Perils,4011,Gross Written Premium — Fire,Revenue,980000000,920000000,850000000
+2025-04,LWG,Marine,4012,Gross Written Premium — Marine,Revenue,650000000,600000000,540000000
+2025-04,LWG,Engineering,4013,Gross Written Premium — Engineering,Revenue,420000000,400000000,370000000
+2025-04,LWG,Liability,4014,Gross Written Premium — Liability,Revenue,380000000,360000000,330000000
+2025-04,LWH,Health,4020,Gross Written Premium — Health,Revenue,720000000,680000000,610000000
+2025-04,LWN,Pension,4030,Pension Contributions,Revenue,2100000000,2000000000,1820000000
+2025-04,LWL,All,5001,Reinsurance Premium Ceded — Life,ReinsuranceCost,-350000000,-320000000,-290000000
+2025-04,LWG,All,5002,Reinsurance Premium Ceded — General,ReinsuranceCost,-480000000,-450000000,-410000000
+2025-04,LWL,All,6001,Net Claims — Life,Claims,-1480000000,-1400000000,-1380000000
+2025-04,LWG,All,6002,Net Claims — General,Claims,-720000000,-680000000,-650000000
+2025-04,LWH,All,6003,Net Claims — Health,Claims,-410000000,-390000000,-360000000
+2025-04,LWL,All,7001,Commission Expense — Life,Expense,-295000000,-280000000,-265000000
+2025-04,LWG,All,7002,Commission Expense — General,Expense,-348000000,-328000000,-304000000
+2025-04,LWH,All,7003,Commission Expense — Health,Expense,-72000000,-68000000,-61000000
+2025-04,LWL,All,8001,Management Expenses — Life,Expense,-480000000,-460000000,-430000000
+2025-04,LWG,All,8002,Management Expenses — General,Expense,-520000000,-490000000,-460000000
+2025-04,LWH,All,8003,Management Expenses — Health,Expense,-145000000,-138000000,-125000000
+2025-04,LWN,All,8004,Management Expenses — Pensure,Expense,-210000000,-200000000,-185000000
+2025-04,LWL,All,9001,Investment Income — Life,InvestmentIncome,1850000000,1780000000,1620000000
+2025-04,LWG,All,9002,Investment Income — General,InvestmentIncome,620000000,590000000,540000000
+2025-04,LWH,All,9003,Investment Income — Health,InvestmentIncome,85000000,80000000,72000000
+2025-04,LWN,All,9004,Investment Income — Pensure,InvestmentIncome,3200000000,3050000000,2780000000
+2025-04,LWL,All,10001,Tax — Life,Tax,-380000000,-360000000,-340000000
+2025-04,LWG,All,10002,Tax — General,Tax,-145000000,-138000000,-128000000
+2025-04,LWH,All,10003,Tax — Health,Tax,-28000000,-26000000,-24000000
+2025-04,LWN,All,10004,Tax — Pensure,Tax,-520000000,-495000000,-450000000

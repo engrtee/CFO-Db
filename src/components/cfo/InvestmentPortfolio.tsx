@@ -87,23 +87,16 @@ const PieTooltip: React.FC<TooltipProps> = ({ active, payload }) => {
 };
 
 // ─── Donut label renderer ─────────────────────────────────────────────────────
-interface PieLabelProps {
-  cx: number;
-  cy: number;
-  midAngle: number;
-  outerRadius: number;
-  name: string;
-  percent: number;
-}
-
-const renderDonutLabel = ({
-  cx, cy, midAngle, outerRadius, name, percent,
-}: PieLabelProps) => {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const renderDonutLabel = (props: any) => {
+  const { cx, cy, midAngle, outerRadius, name, percent } = props as {
+    cx: number; cy: number; midAngle: number; outerRadius: number; name: string; percent: number;
+  };
+  if (percent < 0.04) return null;
   const RADIAN = Math.PI / 180;
   const radius = outerRadius + 28;
   const x = cx + radius * Math.cos(-midAngle * RADIAN);
   const y = cy + radius * Math.sin(-midAngle * RADIAN);
-  if (percent < 0.04) return null;
   return (
     <text
       x={x}

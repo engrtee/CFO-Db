@@ -9,7 +9,7 @@ import { AlertPanel } from './common/AlertPanel';
 export const Header: React.FC = () => {
   const navigate = useNavigate();
   const { user, logout } = useAuthStore();
-  const { redCount, amberCount, unacknowledgedCount, togglePanel, isOpen } = useAlertStore();
+  const { redCount, unacknowledgedCount, togglePanel, isOpen } = useAlertStore();
 
   const handleLogout = () => {
     logout();

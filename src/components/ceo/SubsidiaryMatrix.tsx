@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import {
-  BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip,
+  BarChart, Bar, XAxis, YAxis, Tooltip,
   ResponsiveContainer, LineChart, Line,
 } from 'recharts';
 import { SectionCard } from '../SectionCard';

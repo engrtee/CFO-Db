@@ -1,32 +1,43 @@
 /** @type {import('tailwindcss').Config} */
+// Updated palette: Graphite / Burnt Peach / School Bus Yellow / Seashell
 export default {
   content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
   theme: {
     extend: {
       colors: {
         lw: {
-          navy:    '#0A1628',
-          navyD:   '#06101C',
-          panel:   '#0F1E35',
-          red:     '#C8102E',
-          redD:    '#A50D26',
-          gold:    '#C9A84C',
-          goldL:   '#E2C97A',
-          bg:      '#F4F6FA',
-          card:    '#FFFFFF',
-          card2:   '#F4F6FA',
-          border:  '#E2E5EA',
-          text:    '#111827',
-          muted:   '#6B7280',
-          green:   '#00A86B',
-          amber:   '#F59E0B',
-          danger:  '#DC2626',
-          // dark-mode card surfaces
-          darkCard:  '#132035',
-          darkCard2: '#1A2D47',
-          darkBorder:'#243654',
-          darkText:  '#E8EDF5',
-          darkMuted: '#7A92B0',
+          /* ── Backgrounds ─────────────────────────── */
+          navy:     '#292929',   /* graphite — main bg    */
+          navyD:    '#1E1E1E',   /* deep graphite         */
+          panel:    '#333333',   /* card surface          */
+
+          /* ── Primary accent — Burnt Peach ─────── */
+          red:      '#F27043',
+          redD:     '#D85A30',
+
+          /* ── Secondary accent — School Bus Yellow  */
+          gold:     '#FEC43C',
+          goldL:    '#FFD76B',
+
+          /* ── Light / seashell surfaces ─────────── */
+          bg:       '#FEEEE8',
+          card:     '#FEECE6',
+          card2:    '#FEEEE8',
+          border:   '#E0C8BC',
+          text:     '#292929',
+          muted:    '#7A5E52',
+
+          /* ── Semantic ──────────────────────────── */
+          green:    '#00A86B',
+          amber:    '#FEC43C',
+          danger:   '#E55C3A',
+
+          /* ── Dark-mode card surfaces ─────────── */
+          darkCard:   '#333333',
+          darkCard2:  '#3D3D3D',
+          darkBorder: '#4A4A4A',
+          darkText:   '#F5EDE8',   /* warm white */
+          darkMuted:  '#A89080',   /* warm grey  */
         },
       },
       fontFamily: {

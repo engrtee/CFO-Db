@@ -1,27 +1,32 @@
-/* Leadway brand design tokens — single source of truth */
+/* ─── Leadway Executive Dashboard — Design Tokens ─────────────────────────── */
 :root {
-  --color-navy:       #0A1628;
-  --color-navy-dark:  #06101C;
-  --color-panel:      #0F1E35;
-  --color-red:        #C8102E;
-  --color-red-dark:   #A50D26;
-  --color-gold:       #C9A84C;
-  --color-gold-light: #E2C97A;
-  --color-green:      #00A86B;
-  --color-amber:      #F59E0B;
-  --color-danger:     #DC2626;
+  /* ── Primary palette ─────────────────────────────────────────────────────── */
+  --color-graphite:      #292929;   /* main background */
+  --color-graphite-mid:  #333333;   /* card surface */
+  --color-graphite-card: #3D3D3D;   /* card 2 / hover */
+  --color-graphite-bdr:  #4A4A4A;   /* borders */
+  --color-peach:         #F27043;   /* primary accent (burnt peach) */
+  --color-peach-dark:    #D85A30;   /* hover / pressed */
+  --color-yellow:        #FEC43C;   /* secondary accent (school bus yellow) */
+  --color-yellow-light:  #FFD76B;   /* light highlight */
+  --color-seashell:      #FEEEE8;   /* light page bg */
+  --color-seashell2:     #FEECE6;   /* light card bg */
 
-  --color-dark-card:    #132035;
-  --color-dark-card2:   #1A2D47;
-  --color-dark-border:  #243654;
-  --color-dark-text:    #E8EDF5;
-  --color-dark-muted:   #7A92B0;
+  /* ── Semantic colours ────────────────────────────────────────────────────── */
+  --color-green:   #00A86B;
+  --color-amber:   #FEC43C;
+  --color-danger:  #E55C3A;
 
+  /* ── Text ────────────────────────────────────────────────────────────────── */
+  --color-text-primary: #F5EDE8;   /* warm white */
+  --color-text-muted:   #A89080;   /* warm grey */
+
+  /* ── Typography ──────────────────────────────────────────────────────────── */
   --font-sans:  'DM Sans', system-ui, sans-serif;
   --font-serif: 'Playfair Display', Georgia, serif;
   --font-mono:  'IBM Plex Mono', Menlo, monospace;
 
-  --radius-card: 12px;
+  --radius-card:  12px;
   --radius-panel: 16px;
-  --shadow-card: 0 2px 12px rgba(0,0,0,0.35);
+  --shadow-card:  0 2px 16px rgba(0,0,0,0.40);
 }

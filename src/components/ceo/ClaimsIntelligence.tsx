@@ -6,11 +6,10 @@ import {
 import { KPICard } from '../KPICard';
 import { SectionCard } from '../SectionCard';
 import { DataTable } from '../DataTable';
-import { RAGBadge } from '../common/RAGBadge';
 import { useFilterStore } from '../../store/filterStore';
 import { getClaimsSummary } from '../../services/claimsService';
 import { useAuthStore } from '../../store/authStore';
-import { AlertTriangle, Clock, Shield, Activity } from 'lucide-react';
+import { AlertTriangle, Clock, Shield } from 'lucide-react';
 
 const bn = (v: number) => '₦' + (Math.abs(v) / 1e9).toFixed(2) + 'bn';
 const pct = (v: number) => v.toFixed(1) + '%';

@@ -24,7 +24,6 @@ import { DataTable } from '../DataTable';
 import { WaterfallChart } from '../common/WaterfallChart';
 import { useFilterStore } from '../../store/filterStore';
 import { getFinancialSummary } from '../../services/financialService';
-import type { RAGStatus } from '../../types/subsidiary.types';
 
 // ─── Formatters ───────────────────────────────────────────────────────────────
 const bn = (v: number) => '₦' + (v / 1e9).toFixed(2) + 'bn';
@@ -146,17 +145,6 @@ const FinancialPerformanceInner: React.FC = () => {
     const v = row.varianceNgn as number;
     return v < 0 ? 'text-lw-danger' : '';
   };
-
-  const ragSolvency: RAGStatus =
-    data.consolidatedSolvencyRatio !== undefined
-      ? data.consolidatedSolvencyRatio >= 20
-        ? 'Green'
-        : data.consolidatedSolvencyRatio >= 15
-        ? 'Amber'
-        : 'Red'
-      : 'Green';
-
-  void ragSolvency; // used for type completeness
 
   return (
     <div className="space-y-6">

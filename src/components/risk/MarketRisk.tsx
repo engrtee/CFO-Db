@@ -1,14 +1,14 @@
 import React, { useMemo } from 'react';
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip,
-  ResponsiveContainer, ReferenceLine,
+  ResponsiveContainer,
 } from 'recharts';
 import { KPICard } from '../KPICard';
 import { SectionCard } from '../SectionCard';
 import { RAGBadge } from '../common/RAGBadge';
 import { useFilterStore } from '../../store/filterStore';
 import { getRiskSummary } from '../../services/riskService';
-import { TrendingDown, Activity, Globe, BarChart2 } from 'lucide-react';
+import { TrendingDown, Activity } from 'lucide-react';
 
 const bn = (v: number) => '₦' + (Math.abs(v) / 1e9).toFixed(2) + 'bn';
 const pct = (v: number) => v.toFixed(2) + '%';

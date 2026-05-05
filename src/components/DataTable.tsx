@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import { useState, useCallback } from 'react';
 import { ChevronLeft, ChevronRight, ChevronUp, ChevronDown, Download } from 'lucide-react';
 
 const PAGE_SIZE = 10;

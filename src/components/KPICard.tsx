@@ -41,11 +41,6 @@ const RAG_RING: Record<RAGStatus, string> = {
   Red:   'border-lw-danger',
 };
 
-const RAG_TEXT: Record<RAGStatus, string> = {
-  Green: 'text-lw-green',
-  Amber: 'text-lw-amber',
-  Red:   'text-lw-danger',
-};
 
 export const KPICard: React.FC<KPICardProps> = ({
   title,

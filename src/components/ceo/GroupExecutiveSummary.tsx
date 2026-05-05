@@ -5,10 +5,9 @@ import {
 } from 'recharts';
 import { KPICard } from '../KPICard';
 import { SectionCard } from '../SectionCard';
-import { RAGBadge } from '../common/RAGBadge';
 import { useFilterStore } from '../../store/filterStore';
 import { getConsolidatedSummary } from '../../services/consolidationService';
-import { TrendingUp, DollarSign, Shield, BarChart2, Users, Activity } from 'lucide-react';
+import { TrendingUp, Shield, BarChart2, Activity } from 'lucide-react';
 
 const bn = (v: number) => '₦' + (v / 1e9).toFixed(2) + 'bn';
 const pct = (v: number) => v.toFixed(1) + '%';

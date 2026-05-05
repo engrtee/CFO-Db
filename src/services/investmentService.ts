@@ -71,7 +71,7 @@ function classifyMaturityBucket(maturityDate: string): string {
 // ─── Service Function ──────────────────────────────────────────────────────────
 
 export function getInvestmentSummary(params: ServiceParams): InvestmentResult {
-  const { subsidiaryCode, period, currency } = params;
+  const { subsidiaryCode, currency } = params;
   const holdings  = investmentHoldings  ?? [];
   const ledger    = investmentIncomeLedger ?? [];
 

@@ -9,8 +9,6 @@ import { KPICard } from '../KPICard';
 import { RAGBadge } from '../common/RAGBadge';
 import { getRiskSummary } from '../../services/riskService';
 import { getClaimsSummary } from '../../services/claimsService';
-import type { ClaimsRegisterRow } from '../../types/claims.types';
-import type { ReinsurerConcentration } from '../../services/riskService';
 import { useFilterStore } from '../../store/filterStore';
 
 const bn = (v: number) => '₦' + (Math.abs(v) / 1e9).toFixed(2) + 'bn';
@@ -160,7 +158,7 @@ export const InsuranceRisk: React.FC = () => {
             <CartesianGrid strokeDasharray="3 3" stroke="#1E2D3D" horizontal={false} />
             <XAxis
               type="number"
-              tickFormatter={(v: number) => bn(v)}
+              tickFormatter={(v) => bn(Number(v))}
               tick={{ fill: '#7A92B0', fontSize: 10 }}
               axisLine={{ stroke: '#1E2D3D' }}
             />
@@ -177,7 +175,7 @@ export const InsuranceRisk: React.FC = () => {
               <LabelList
                 dataKey="net"
                 position="right"
-                formatter={(v: number) => `Net: ${bn(v)}`}
+                formatter={(v) => `Net: ${bn(Number(v))}`}
                 style={{ fill: '#7A92B0', fontSize: 10 }}
               />
             </Bar>

@@ -5,14 +5,14 @@
 @tailwind utilities;
 
 :root {
-  /* Leadway brand CSS variables */
-  --lw-navy:       #0A1628;
-  --lw-panel:      #0F1E35;
-  --lw-red:        #C8102E;
-  --lw-gold:       #C9A84C;
-  --lw-green:      #00A86B;
-  --lw-amber:      #F59E0B;
-  --lw-danger:     #DC2626;
+  /* Warm palette — Graphite / Burnt Peach / School Bus Yellow / Seashell */
+  --lw-navy:    #292929;
+  --lw-panel:   #333333;
+  --lw-red:     #F27043;
+  --lw-gold:    #FEC43C;
+  --lw-green:   #00A86B;
+  --lw-amber:   #FEC43C;
+  --lw-danger:  #E55C3A;
 }
 
 @layer base {
@@ -24,20 +24,20 @@
   * { @apply box-border; }
 
   ::-webkit-scrollbar        { width: 5px; height: 5px; }
-  ::-webkit-scrollbar-track  { background: #132035; }
-  ::-webkit-scrollbar-thumb  { background: #243654; border-radius: 3px; }
-  ::-webkit-scrollbar-thumb:hover { background: #C8102E; }
+  ::-webkit-scrollbar-track  { background: #292929; }
+  ::-webkit-scrollbar-thumb  { background: #4A4A4A; border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover { background: #F27043; }
 }
 
 @layer utilities {
   /* Scrollbar */
   .scrollbar-thin {
     scrollbar-width: thin;
-    scrollbar-color: #243654 #132035;
+    scrollbar-color: #D1D5DB #F3F4F6;
   }
   .scrollbar-thin::-webkit-scrollbar       { width: 5px; height: 5px; }
-  .scrollbar-thin::-webkit-scrollbar-track { background: #132035; }
-  .scrollbar-thin::-webkit-scrollbar-thumb { background: #243654; border-radius: 3px; }
+  .scrollbar-thin::-webkit-scrollbar-track { background: #F3F4F6; }
+  .scrollbar-thin::-webkit-scrollbar-thumb { background: #D1D5DB; border-radius: 3px; }
 
   /* Animations */
   .animate-fade-in {

@@ -1,6 +1,5 @@
 import React from 'react';
 import { SectionCard } from '../SectionCard';
-import { KPICard } from '../KPICard';
 import { RAGBadge } from '../common/RAGBadge';
 import { getRiskSummary } from '../../services/riskService';
 import { useFilterStore } from '../../store/filterStore';

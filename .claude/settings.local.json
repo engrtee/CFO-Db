@@ -5,7 +5,13 @@
       "Bash(npx --no-install tsc -p tsconfig.app.json --noEmit)",
       "Bash(npm cache *)",
       "Bash(node node_modules/.bin/tsc -p tsconfig.app.json --noEmit)",
-      "Bash(node node_modules/typescript/bin/tsc -p tsconfig.app.json --noEmit)"
+      "Bash(node node_modules/typescript/bin/tsc -p tsconfig.app.json --noEmit)",
+      "Bash(ls render.yaml)",
+      "Bash(cat vite.config.ts)",
+      "Bash(cat vite.config.js)",
+      "Bash(Get-PSDrive C)",
+      "Bash(Select-Object Used, Free)",
+      "Bash(wmic logicaldisk *)"
     ]
   }
 }

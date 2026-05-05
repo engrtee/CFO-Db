@@ -1,7 +1,7 @@
 import React from 'react';
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip,
-  ResponsiveContainer, ReferenceLine, LineChart, Line, Legend,
+  ResponsiveContainer, ReferenceLine, Line, Legend,
 } from 'recharts';
 import { SectionCard } from '../SectionCard';
 import { RAGBadge } from '../common/RAGBadge';
@@ -9,7 +9,6 @@ import { GaugeChart } from '../common/GaugeChart';
 import { getRagForClaimsPayingAbility } from '../../services/complianceService';
 
 const bn = (v: number) => '₦' + (Math.abs(v) / 1e9).toFixed(2) + 'bn';
-const pct = (v: number) => v.toFixed(1) + '%';
 
 // Mock mismatch data by time bucket
 const MISMATCH_DATA = [

@@ -29,7 +29,6 @@ const CreditRisk: React.FC = () => {
   );
 
   // Reinsurer concentration
-  const totalProgramme = reinsuranceTreatyLog.reduce((s, t) => s + t.premium_ceded_ytd, 0);
   const reinsurerRows = data.reinsuerConcentration.map((r) => ({
     reinsurer: r.reinsurer,
     rating: r.rating,

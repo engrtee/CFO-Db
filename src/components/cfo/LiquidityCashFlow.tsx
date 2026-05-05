@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip,
-  ResponsiveContainer, ReferenceLine, LineChart, Line, Legend,
+  ResponsiveContainer, Legend,
 } from 'recharts';
 import { KPICard } from '../KPICard';
 import { SectionCard } from '../SectionCard';

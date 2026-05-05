@@ -11,7 +11,7 @@ import { getPremiumSummary } from '../../services/premiumService';
 import { useAuthStore } from '../../store/authStore';
 import { customerMaster } from '../../data/customer_master';
 import { brokerMaster } from '../../data/broker_master';
-import { TrendingUp, Users, RefreshCw, Activity } from 'lucide-react';
+import { TrendingUp, RefreshCw, Activity } from 'lucide-react';
 
 const bn = (v: number) => '₦' + (v / 1e9).toFixed(2) + 'bn';
 const pct = (v: number) => v.toFixed(1) + '%';
@@ -82,7 +82,7 @@ const PremiumIntelligence: React.FC = () => {
           <div className="flex items-center gap-4">
             <ResponsiveContainer width={180} height={200}>
               <PieChart>
-                <Pie data={data.gwpByChannel} cx="50%" cy="50%" outerRadius={80} innerRadius={45} dataKey="value" animationDuration={800}>
+                <Pie data={data.gwpByChannel as unknown as { name: string; value: number }[]} cx="50%" cy="50%" outerRadius={80} innerRadius={45} dataKey="value" animationDuration={800}>
                   {data.gwpByChannel.map((_, i) => (
                     <Cell key={i} fill={DONUT_COLORS[i % DONUT_COLORS.length]} />
                   ))}

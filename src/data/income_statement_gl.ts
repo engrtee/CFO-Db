@@ -47,14 +47,12 @@ let idCounter = 1;
 for (const sub of subsidiaries) {
   const ytdActuals: Record<string, number> = {};
   const ytdBudgets: Record<string, number> = {};
-  let year = 2024;
 
   for (let pi = 0; pi < periods.length; pi++) {
     const period = periods[pi];
     const growth = Math.pow(1.015, pi);
 
     if (pi === 12) {
-      year = 2025;
       Object.keys(ytdActuals).forEach(k => { ytdActuals[k] = 0; ytdBudgets[k] = 0; });
     }
 

@@ -1,0 +1,21 @@
+holding_id,subsidiary,asset_class,instrument_name,issuer,isin,face_value,book_value,market_value,coupon_rate,yield_to_maturity,maturity_date,duration_years,credit_rating,is_prescribed_asset,sector,currency
+INV-0001,LWL,FGN Bond,FGN Bond 2028,Federal Government of Nigeria,NG0002025081,5000000000,4950000000,5100000000,12.75,11.80,2028-06-15,2.4,AAA,Yes,Government,NGN
+INV-0002,LWL,FGN Bond,FGN Bond 2031,Federal Government of Nigeria,NG0002026041,3000000000,2980000000,3050000000,13.50,12.10,2031-03-22,4.8,AAA,Yes,Government,NGN
+INV-0003,LWL,State Bond,Lagos State Bond 2029,Lagos State Government,NG0003025012,1500000000,1480000000,1520000000,14.00,13.20,2029-09-30,3.2,AA-,Yes,Government,NGN
+INV-0004,LWL,Corporate Bond,Dangote Industries Bond 2027,Dangote Industries Ltd,NG0004025001,800000000,790000000,805000000,16.50,15.80,2027-12-01,1.8,A+,No,Industrial,NGN
+INV-0005,LWL,Equity,MTN Nigeria Plc,MTN Nigeria Communications Plc,NGMTNN000009,0,1200000000,1650000000,0,0,,,BBB+,No,Telecom,NGN
+INV-0006,LWL,Equity,Dangote Cement Plc,Dangote Cement Plc,NGDANGCEM001,0,950000000,1380000000,0,0,,,BBB+,No,Industrial,NGN
+INV-0007,LWL,Treasury Bill,91-Day T-Bill,Federal Government of Nigeria,NG0001025110,2000000000,1985000000,1990000000,0,18.50,2025-06-30,0.2,AAA,Yes,Government,NGN
+INV-0008,LWL,Money Market,CBN OMO Bill,Central Bank of Nigeria,NG0001025210,1000000000,998000000,999000000,0,19.20,2025-05-31,0.1,AAA,Yes,Government,NGN
+INV-0009,LWL,Corporate Bond,Access Bank Bond 2026,Access Bank Plc,NG0004026001,600000000,595000000,601000000,15.75,15.10,2026-06-30,1.2,A-,No,Banking,NGN
+INV-0010,LWL,Equity,Airtel Africa Plc,Airtel Africa Plc,NGAIRTLAFR01,0,420000000,580000000,0,0,,,BBB,No,Telecom,NGN
+INV-0011,LWG,FGN Bond,FGN Bond 2027,Federal Government of Nigeria,NG0002025061,2000000000,1985000000,2040000000,12.00,11.50,2027-03-15,1.9,AAA,Yes,Government,NGN
+INV-0012,LWG,Treasury Bill,182-Day T-Bill,Federal Government of Nigeria,NG0001025130,1500000000,1485000000,1490000000,0,18.20,2025-09-15,0.4,AAA,Yes,Government,NGN
+INV-0013,LWG,Equity,BUA Foods Plc,BUA Foods Plc,NGBUAFOODS01,0,380000000,510000000,0,0,,,BBB,No,Consumer Goods,NGN
+INV-0014,LWG,Corporate Bond,Seplat Energy Bond 2028,Seplat Energy Plc,NG0004028001,500000000,495000000,502000000,17.00,16.20,2028-04-20,2.9,BBB+,No,Oil & Gas,NGN
+INV-0015,LWG,Money Market,Fixed Deposit - UBA,United Bank for Africa,NG0006025001,800000000,800000000,800000000,18.50,18.50,2025-07-31,0.2,A-,No,Banking,NGN
+INV-0016,LWH,Treasury Bill,91-Day T-Bill,Federal Government of Nigeria,NG0001025111,500000000,496000000,498000000,0,18.50,2025-06-30,0.2,AAA,Yes,Government,NGN
+INV-0017,LWH,Money Market,Fixed Deposit - Zenith,Zenith Bank Plc,NG0006025002,400000000,400000000,400000000,19.00,19.00,2025-06-15,0.1,A,No,Banking,NGN
+INV-0018,LWN,FGN Bond,FGN Bond 2035,Federal Government of Nigeria,NG0002035001,8000000000,7900000000,8200000000,14.50,13.80,2035-01-15,7.8,AAA,Yes,Government,NGN
+INV-0019,LWN,State Bond,Rivers State Bond 2032,Rivers State Government,NG0003032001,2000000000,1970000000,2010000000,15.00,14.20,2032-06-30,5.8,A-,Yes,Government,NGN
+INV-0020,LWN,Corporate Bond,Nestle Nigeria Bond 2029,Nestle Nigeria Plc,NG0004029001,1200000000,1190000000,1205000000,15.50,14.90,2029-11-30,3.6,A+,No,Consumer Goods,NGN
